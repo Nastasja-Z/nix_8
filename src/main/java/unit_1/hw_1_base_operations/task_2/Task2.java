@@ -5,7 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Task2 {
-    public  void task2() {
+    public void task2() {
         System.out.printf("Enter a string -> ");
         String inputString = System.console().readLine();
         Map<String, Integer> letters = new TreeMap<>();

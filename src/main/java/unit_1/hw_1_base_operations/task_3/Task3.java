@@ -3,7 +3,7 @@ package unit_1.hw_1_base_operations.task_3;
 import java.util.Scanner;
 
 public class Task3 {
-    public  void task3() {
+    public void task3() {
         while (true) {
             System.out.printf("Please, enter a count of lessons -> ");
             Scanner inputCount = new Scanner(System.in);

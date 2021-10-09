@@ -1,7 +1,7 @@
 package unit_1.hw_1_base_operations.task_1;
 
 public class Task1 {
-    public  void task1() {
+    public void task1() {
         System.out.printf("Enter a string -> ");
         String inputString = System.console().readLine();
         int sum = 0;
