@@ -8,7 +8,7 @@ public class Task2 {
     public void task2() {
         System.out.printf("Enter a string -> ");
         Scanner input = new Scanner(System.in);
-        String inputString=input.nextLine();
+        String inputString = input.nextLine();
         Map<String, Integer> letters = new TreeMap<>();
         Pattern pattern = Pattern.compile("[a-zA-Z]|[\\p{InCyrillic}]");
         Matcher matcher = pattern.matcher(inputString);
