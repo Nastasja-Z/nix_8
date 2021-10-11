@@ -10,6 +10,7 @@ public class Task3 {
             int lesson;
             try {
                 lesson = inputCount.nextInt();
+
                 if (lesson < 1 || lesson > 10) {
                     throw new IllegalArgumentException("Enter right lesson!");
                 }
