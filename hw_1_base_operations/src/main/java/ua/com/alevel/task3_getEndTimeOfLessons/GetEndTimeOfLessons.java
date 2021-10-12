@@ -1,8 +1,8 @@
-package unit_1.hw_1_base_operations.task_3;
+package ua.com.alevel.task3_getEndTimeOfLessons;
 
 import java.util.Scanner;
 
-public class Task3 {
+public class GetEndTimeOfLessons {
     public void task3() {
         while (true) {
             System.out.printf("Please, enter a count of lessons -> ");
@@ -10,7 +10,6 @@ public class Task3 {
             int lesson;
             try {
                 lesson = inputCount.nextInt();
-
                 if (lesson < 1 || lesson > 10) {
                     throw new IllegalArgumentException("Enter right lesson!");
                 }

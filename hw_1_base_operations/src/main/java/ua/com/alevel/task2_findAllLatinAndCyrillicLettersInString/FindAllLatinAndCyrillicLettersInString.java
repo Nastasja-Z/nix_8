@@ -1,10 +1,10 @@
-package unit_1.hw_1_base_operations.task_2;
+package ua.com.alevel.task2_findAllLatinAndCyrillicLettersInString;
 
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Task2 {
+public class FindAllLatinAndCyrillicLettersInString {
     public void task2() {
         System.out.printf("Enter a string -> ");
         Scanner input = new Scanner(System.in);
