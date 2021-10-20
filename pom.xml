@@ -9,7 +9,9 @@
     <version>1.0-SNAPSHOT</version>
 
     <modules>
+        <module>hw_2_strings</module>
         <module>hw_1_base_operations</module>
+        <module>reverse_string</module>
     </modules>
 
     <packaging>pom</packaging>
