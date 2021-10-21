@@ -7,7 +7,10 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ReverseOfStringUtils {
+public final class ReverseOfStringUtils {
+
+    private ReverseOfStringUtils() {
+    }
 
     public static String reverse(String src) {
         String resultOfReverse = "";
