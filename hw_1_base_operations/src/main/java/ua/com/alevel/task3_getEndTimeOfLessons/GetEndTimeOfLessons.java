@@ -3,6 +3,7 @@ package ua.com.alevel.task3_getEndTimeOfLessons;
 import java.util.Scanner;
 
 public class GetEndTimeOfLessons {
+
     public void task3() {
         while (true) {
             System.out.printf("Please, enter a count of lessons -> ");

@@ -5,6 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FindAllLatinAndCyrillicLettersInString {
+
     public void task2() {
         System.out.printf("Enter a string -> ");
         Scanner input = new Scanner(System.in);

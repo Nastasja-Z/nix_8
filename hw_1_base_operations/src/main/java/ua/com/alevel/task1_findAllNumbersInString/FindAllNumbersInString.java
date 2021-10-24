@@ -3,6 +3,7 @@ package ua.com.alevel.task1_findAllNumbersInString;
 import java.util.Scanner;
 
 public class FindAllNumbersInString {
+
     public void task1() {
         System.out.printf("Enter a string -> ");
         Scanner input = new Scanner(System.in);

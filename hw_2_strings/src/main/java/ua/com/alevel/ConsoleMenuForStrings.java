@@ -55,7 +55,6 @@ public class ConsoleMenuForStrings {
         }
     }
 
-
     private static StringBuilder currentLineToReverse() {
         Scanner scanner = new Scanner(new InputStreamReader(System.in));
         System.out.println("Please enter a string, which you want to use to continue (more than 3 symbols) ->");
@@ -95,7 +94,6 @@ public class ConsoleMenuForStrings {
         } catch (NumberFormatException e) {
         }
         return full;
-
     }
 
     private static void fullMenuOfOptions() {

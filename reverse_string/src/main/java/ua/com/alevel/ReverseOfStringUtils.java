@@ -9,8 +9,7 @@ import java.util.regex.Pattern;
 
 public final class ReverseOfStringUtils {
 
-    private ReverseOfStringUtils() {
-    }
+    private ReverseOfStringUtils() { }
 
     public static String reverse(String src) {
         String resultOfReverse = "";
@@ -119,5 +118,4 @@ public final class ReverseOfStringUtils {
         }
         return new StringBuilder(resultOfReverse);
     }
-
 }
