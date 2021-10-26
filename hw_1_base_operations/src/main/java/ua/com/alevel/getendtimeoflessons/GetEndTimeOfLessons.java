@@ -1,10 +1,10 @@
-package ua.com.alevel.task3_getEndTimeOfLessons;
+package ua.com.alevel.getendtimeoflessons;
 
 import java.util.Scanner;
 
 public class GetEndTimeOfLessons {
 
-    public void task3() {
+    public void getEndTime() {
         while (true) {
             System.out.printf("Please, enter a count of lessons -> ");
             Scanner inputCount = new Scanner(System.in);

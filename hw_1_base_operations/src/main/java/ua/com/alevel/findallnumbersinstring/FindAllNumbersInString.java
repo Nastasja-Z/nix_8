@@ -1,10 +1,10 @@
-package ua.com.alevel.task1_findAllNumbersInString;
+package ua.com.alevel.findallnumbersinstring;
 
 import java.util.Scanner;
 
 public class FindAllNumbersInString {
 
-    public void task1() {
+    public void findAllNumbersInString() {
         System.out.printf("Enter a string -> ");
         Scanner input = new Scanner(System.in);
         String inputString = input.nextLine();

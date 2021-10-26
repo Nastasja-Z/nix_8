@@ -9,7 +9,8 @@ import java.util.regex.Pattern;
 
 public final class ReverseOfStringUtils {
 
-    private ReverseOfStringUtils() { }
+    private ReverseOfStringUtils() {
+    }
 
     public static String reverse(String src) {
         String resultOfReverse = "";
@@ -48,14 +49,12 @@ public final class ReverseOfStringUtils {
             String[] newSrc = src.toString().split(" ");
             for (String s :
                     newSrc) {
-
                 resultOfReverse.append(reverse(s) + " ");   //description of this function is above
             }
         }
         System.out.println("Now your string is: " + resultOfReverse);
         return new StringBuilder(resultOfReverse);
     }
-
 
     public static StringBuilder reverse(StringBuilder src, String dest) {
         System.out.println("Your string was: " + src);

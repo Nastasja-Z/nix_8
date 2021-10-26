@@ -1,4 +1,4 @@
-package ua.com.alevel.task2_findAllLatinAndCyrillicLettersInString;
+package ua.com.alevel.findalllatinandcyrilliclettersinstring;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 public class FindAllLatinAndCyrillicLettersInString {
 
-    public void task2() {
+    public void findAllLatinAndCyrillic() {
         System.out.printf("Enter a string -> ");
         Scanner input = new Scanner(System.in);
         String inputString = input.nextLine();

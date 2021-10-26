@@ -1,8 +1,8 @@
 package ua.com.alevel;
 
-import ua.com.alevel.task1_findAllNumbersInString.FindAllNumbersInString;
-import ua.com.alevel.task2_findAllLatinAndCyrillicLettersInString.FindAllLatinAndCyrillicLettersInString;
-import ua.com.alevel.task3_getEndTimeOfLessons.GetEndTimeOfLessons;
+import ua.com.alevel.findallnumbersinstring.FindAllNumbersInString;
+import ua.com.alevel.findalllatinandcyrilliclettersinstring.FindAllLatinAndCyrillicLettersInString;
+import ua.com.alevel.getendtimeoflessons.GetEndTimeOfLessons;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,17 +18,17 @@ public class ConsoleMenu {
             while ((event = reader.readLine()) != null) {
                 switch (event) {
                     case "1": {
-                        new FindAllNumbersInString().task1();
+                        new FindAllNumbersInString().findAllNumbersInString();
                         fullMenuOfOptions();
                     }
                     break;
                     case "2": {
-                        new FindAllLatinAndCyrillicLettersInString().task2();
+                        new FindAllLatinAndCyrillicLettersInString().findAllLatinAndCyrillic();
                         fullMenuOfOptions();
                     }
                     break;
                     case "3": {
-                        new GetEndTimeOfLessons().task3();
+                        new GetEndTimeOfLessons().getEndTime();
                         fullMenuOfOptions();
                     }
                     break;
