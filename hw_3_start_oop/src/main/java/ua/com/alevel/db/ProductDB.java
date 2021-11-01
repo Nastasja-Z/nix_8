@@ -7,12 +7,15 @@ import java.util.UUID;
 public class ProductDB {
 
     private static ProductDB instance;
+    private final int INITIAL_SIZE = 5;
     private int sizeOfArray;
+    private int currentLastIndex;
     private Product[] products;
 
     private ProductDB() {
-        sizeOfArray = 0;
-        products = new Product[sizeOfArray];
+        products = new Product[INITIAL_SIZE];
+        currentLastIndex = 0;
+        sizeOfArray = INITIAL_SIZE;
     }
 
     public static ProductDB getInstance() {
@@ -23,7 +26,11 @@ public class ProductDB {
     }
 
     public void create(Product product) {
-        products = addProductToTheEnd(sizeOfArray, products, product);
+        if (sizeOfArray == currentLastIndex)
+        doubleSize();
+        product.setId(generateId());
+        products[currentLastIndex] = product;
+        currentLastIndex++;
     }
 
     public void update(Product product) {
@@ -34,30 +41,23 @@ public class ProductDB {
     }
 
     public void delete(String id) {
-        products = removeTheProduct(products, findById(id));
-    }
-
-    public Product[] addProductToTheEnd(int currentSizeOfArray, Product products[], Product product) {
-        product.setId(generateId());
-        Product[] newArray = new Product[currentSizeOfArray + 1];
-        for (int i = 0; i < currentSizeOfArray; i++) {
-            newArray[i] = products[i];
-        }
-        newArray[currentSizeOfArray] = product;
-        sizeOfArray += 1;
-        return newArray;
-    }
-
-    public Product[] removeTheProduct(Product[] products, Product product) {
-        Product[] anotherArray = new Product[products.length - 1];
-        for (int i = 0, k = 0; i < products.length; i++) {
-            if (products[i].getId().equals(product.getId())) {
-                continue;
+        int dropedItem=0;
+        for (int i = 0; i < currentLastIndex; i++) {
+            if (products[i].getId().equals(id)) {
+                dropedItem=i;
             }
-            anotherArray[k++] = products[i];
         }
-        sizeOfArray -= 1;
-        return anotherArray;
+        for (int j = dropedItem; j < currentLastIndex; j++) {
+            products[j] = products[j+1];
+        }
+        currentLastIndex -= 1;
+    }
+
+    private void doubleSize() {
+        Product[] newArray = new Product[sizeOfArray * 2];
+        System.arraycopy(products, 0, newArray, 0, sizeOfArray);
+        products = newArray;
+        sizeOfArray *= 2;
     }
 
     public Product findById(String id) {

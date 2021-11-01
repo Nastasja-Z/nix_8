@@ -128,11 +128,12 @@ public class ProductController {
     private void findAll(BufferedReader reader) {
         Product[] products = productService.findAll();
         if (products != null && products.length != 0) {
-            System.out.println("Your basket has " + products.length + " products");
             int id = 0;
             for (Product product : products) {
-                id++;
-                System.out.println("product " + id + " = " + product);
+                if(product != null){
+                    id++;
+                    System.out.println("product " + id + " = " + product);
+                }
             }
         } else {
             System.out.println("product empty");
