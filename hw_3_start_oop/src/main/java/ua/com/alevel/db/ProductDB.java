@@ -27,7 +27,7 @@ public class ProductDB {
 
     public void create(Product product) {
         if (sizeOfArray == currentLastIndex)
-        doubleSize();
+            doubleSize();
         product.setId(generateId());
         products[currentLastIndex] = product;
         currentLastIndex++;
@@ -41,14 +41,14 @@ public class ProductDB {
     }
 
     public void delete(String id) {
-        int dropedItem=0;
+        int dropedItem = 0;
         for (int i = 0; i < currentLastIndex; i++) {
             if (products[i].getId().equals(id)) {
-                dropedItem=i;
+                dropedItem = i;
             }
         }
         for (int j = dropedItem; j < currentLastIndex; j++) {
-            products[j] = products[j+1];
+            products[j] = products[j + 1];
         }
         currentLastIndex -= 1;
     }
