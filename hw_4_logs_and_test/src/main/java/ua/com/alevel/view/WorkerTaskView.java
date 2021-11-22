@@ -195,7 +195,7 @@ public class WorkerTaskView {
                 }
             }
             workerService.delete(idw);
-            System.out.println("Dou you want create new account?");
+            System.out.println("Dou you want create new account? (write 'yes' if you want)");
             String yes = reader.readLine();
             if (yes.equals("yes")) {
                 createProfile(reader);
