@@ -16,3 +16,7 @@ ua/com/alevel/db/ProductDB.java:15
 а так ты каждый раз пересоздаешь массив и прогоняешь копи
 
 module_1 = 9
+
+hw_4 = 6
+mvn clean test запустил руками
+Tests run: 0, Failures: 0, Errors: 0, Skipped: 0
