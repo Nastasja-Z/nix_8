@@ -8,7 +8,8 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>hw_4_logs_and_test</artifactId>
+
+    <artifactId>hw_5_collection</artifactId>
 
     <properties>
         <java.version>17</java.version>
@@ -18,52 +19,11 @@
         <maven.shade.plugin.version>3.2.0</maven.shade.plugin.version>
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
         <maven.jar.plugin.version>3.2.0</maven.jar.plugin.version>
-        <maven.surefire.plugin.version>2.22.2</maven.surefire.plugin.version>
-
         <junit.version>4.13.1</junit.version>
         <junit.jupiter.version>5.7.0</junit.jupiter.version>
         <slf4j.version>1.7.30</slf4j.version>
         <logback.version>1.2.3</logback.version>
-
-        <logs.folder>logs</logs.folder>
-        <logs.archived.folder>archived</logs.archived.folder>
-        <logs.local.folder>local</logs.local.folder>
-        <logs.prod.folder>prod</logs.prod.folder>
-        <logs.dev.folder>dev</logs.dev.folder>
     </properties>
-
-    <profiles>
-        <profile>
-            <id>local</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <log.path>${logs.folder}/${logs.local.folder}</log.path>
-                <log.info>${log.path}/info.log</log.info>
-                <log.warn>${log.path}/warn.log</log.warn>
-                <log.error>${log.path}/error.log</log.error>
-            </properties>
-        </profile>
-        <profile>
-            <id>prod</id>
-            <properties>
-                <log.path>${logs.folder}/${logs.prod.folder}</log.path>
-                <log.info>${log.path}/info.log</log.info>
-                <log.warn>${log.path}/warn.log</log.warn>
-                <log.error>${log.path}/error.log</log.error>
-            </properties>
-        </profile>
-        <profile>
-            <id>dev</id>
-            <properties>
-                <log.path>${logs.folder}/${logs.dev.folder}</log.path>
-                <log.info>${log.path}/info.log</log.info>
-                <log.warn>${log.path}/warn.log</log.warn>
-                <log.error>${log.path}/error.log</log.error>
-            </properties>
-        </profile>
-    </profiles>
 
     <dependencies>
         <dependency>
@@ -112,10 +72,16 @@
             <artifactId>logback-core</artifactId>
             <version>${logback.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-core</artifactId>
+            <version>1.3</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
-        <finalName>hw_4_logs_and_test</finalName>
+        <finalName>hw_5_collection</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -123,11 +89,6 @@
             </resource>
         </resources>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven.surefire.plugin.version}</version>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -152,7 +113,7 @@
                             <transformers>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>ua.com.alevel.LogsAndTestMain</mainClass>
+                                    <mainClass>ua.com.alevel.MathSetMain</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
