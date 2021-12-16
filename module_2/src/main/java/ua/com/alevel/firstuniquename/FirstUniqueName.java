@@ -4,7 +4,6 @@ import ua.com.alevel.fileactions.FileActions;
 import ua.com.alevel.fileactions.impl.FileActionsImpl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static ua.com.alevel.pathhelper.PathHelper.*;
