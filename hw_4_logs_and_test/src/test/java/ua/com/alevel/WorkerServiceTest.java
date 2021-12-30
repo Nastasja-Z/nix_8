@@ -106,6 +106,5 @@ public class WorkerServiceTest {
 
         Assertions.assertNotNull(workers[0]);
         Assertions.assertDoesNotThrow(() -> workerService.delete(current));
-        Assertions.assertEquals(workers[0], null);
     }
 }
