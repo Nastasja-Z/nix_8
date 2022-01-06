@@ -12,22 +12,19 @@ public class FirstUniqueName {
 
     public void run() {
         FileActions file = new FileActionsImpl();
-
         List<String> line = file.readFromFileToString(PATH_TO_FILE_SECOND_INPUT);
         String regex = "[^a-zA-Z]+";
         List<String> mist = new ArrayList<>();
         for (String s : line) {
             String[] split = s.split(regex);
-            //System.out.println(Arrays.asList(split));
             for (String s1 : split) {
                 mist.add(s1);
             }
         }
-      //  System.out.println(uniqueString(mist.toArray(new String[0])));
         file.writeToFile(PATH_TO_FILE_SECOND_OUTPUT, false,uniqueString(mist.toArray(new String[0])));
     }
 
-    public static String uniqueString(String[] s) {
+    private static String uniqueString(String[] s) {
         for (int i = 0; i < s.length; i++) {
             boolean unique = true;
             for (int j = i + 1; j < s.length; j++) {

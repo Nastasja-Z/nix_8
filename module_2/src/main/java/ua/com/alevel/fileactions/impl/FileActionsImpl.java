@@ -23,20 +23,20 @@ public class FileActionsImpl implements FileActions {
         // System.out.println("file = " + file.exists());
     }
 
- /*   @Override
-    public void readFromFile(String pathToFile) {
+    @Override
+    public String readSourceFromFile(String pathToFile) {
+        String source=null;
         try {
             FileReader fileReader = new FileReader(pathToFile);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
-            while (bufferedReader.ready()) {
-                System.out.println("readFromFile = " + bufferedReader.readLine());
-            }
+            source=bufferedReader.readLine();
             bufferedReader.close();
             fileReader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }*/
+        return source;
+    }
 
     @Override
     public List<String> readFromFileToString(String pathToFile) {
