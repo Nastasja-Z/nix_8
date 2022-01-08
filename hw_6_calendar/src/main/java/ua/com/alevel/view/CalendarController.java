@@ -1,45 +1,24 @@
 package ua.com.alevel.view;
 
 import ua.com.alevel.entity.Calendar;
+import ua.com.alevel.service.CalendarService;
 import ua.com.alevel.validation.DateValidation;
 import ua.com.alevel.validation.IncorrectInputException;
 
+import javax.accessibility.AccessibleKeyBinding;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Locale;
+
+import static ua.com.alevel.datehelper.DateHelper.MONTHS;
 
 public class CalendarController {
 
+    CalendarService calendarService = new CalendarService();
+
     private String formatInput = "1";
     private String formatOutput = "1";
- /*       System.out.println("Enter date");
-            String current = reader.readLine();
-            String[] dateTime = current.split(" ");
-            String[] tempDate;
-            String[] tempTime;
-            String[] date = new String[]{"1", "1", "0", "0"};
-            String[] time = new String[]{"0", "0", "0", "0"};
-            if (dateTime.length > 1) {
-                tempDate = dateTime[0].split("/");
-                tempTime = dateTime[1].split(":");
-                for (int i = 0; i < tempTime.length; i++) {
-                    time[i] = tempTime[i];
-                    date[i] = tempDate[i];
-                }
-            }
-            Calendar calendar = new Calendar();
-            calendar.setDay(Integer.parseInt(date[0]));
-            calendar.setMonth(Integer.parseInt(date[1]));
-            calendar.setYear(Integer.parseInt(date[2]));
-            calendar.setHour(Integer.parseInt(time[0]));
-            calendar.setMinute(Integer.parseInt(time[1]));
-            calendar.setSecond(Integer.parseInt(time[2]));
-            calendar.setMillisecond(Integer.parseInt(time[3]));
-            if (DateValidation.dateValidation(calendar)) {
-                System.out.println(calendar.toString());
-            } else {
-                throw new IncorrectInputException();
-            }*/
 
     public void run() {
         String position;
@@ -79,9 +58,16 @@ public class CalendarController {
                 break;
             case "3":
                 difference(reader);
-//                join(reader);
                 break;
             case "4":
+                String firstSource = dataInput(reader, "first");
+                while (!DateValidation.sourceDateValidation(firstSource, formatInput)) {
+                    //maybe check newInput() (delete last line from that function)
+                    System.out.println("Sorry, your input was incorrect. Try one more time");
+                    firstSource = dataInput(reader, "new");
+                }
+                Calendar firstDate = dataProcessingForInput(firstSource);
+                System.out.println(outputDate(firstDate));
 //                intersection(reader);
                 break;
             case "5":
@@ -100,87 +86,123 @@ public class CalendarController {
     }
 
     private void difference(BufferedReader reader) {
+        String firstSource = dataInput(reader, "first");
+        Calendar firstDate = dataProcessingForInput(firstSource);
+        System.out.println(outputDate(firstDate));
+
+        String secondSource = dataInput(reader, "second");
+        Calendar secondDate = dataProcessingForInput(secondSource);
+        System.out.println(outputDate(secondDate));
+        String result = "";
+        String position;
+        System.out.println("in\n 1 - milliseconds; 2 - seconds; 3 - minutes;\n 4 - hours; 5 - days; 6 - years;");
         try {
-            System.out.println("Enter first date");
-            String firstSource = reader.readLine();
-            Calendar firstDate = dataProcessingForInput(firstSource);
-            System.out.println(outputDate(firstDate));
-
-            //String secondDate = reader.readLine();
-
-            //check format of data
-            //action
-            //convert to output format
-
+            position = reader.readLine();
+            result = CalendarService.difference(firstDate, secondDate, Integer.parseInt(position));
+            System.out.println("difference= " + result);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private Calendar dataProcessingForInput(String data) { //maybe in service
-        Calendar calendar = new Calendar();
+    private String dataInput(BufferedReader reader, String source) {
+        System.out.println("Enter " + source + " data");
+        String data = "";
         try {
-            if (formatInput.equals("1")) {
-                String[] dateTime = data.split(" ");
-                String[] tempDate;
-                String[] tempTime;
-                String[] date = new String[]{"1", "1", "0", "0"};
-                String[] time = new String[]{"0", "0", "0", "0"};
-                if (dateTime.length > 1) {
-                    tempDate = dateTime[0].split("/");
-                    tempTime = dateTime[1].split(":");
-                    if (tempDate.length > 1)
-                        for (int i = 0; i < tempDate.length; i++) {
-                            if (!tempDate[i].equals("")) {
-                                date[i] = tempDate[i];
-                            }
-                        }
-                    else {
-                        date[2] = tempDate[0];
-                    }
-                    for (int i = 0; i < tempTime.length; i++) {
-                        if (!tempTime[i].equals("")) {
-                            time[i] = tempTime[i];
-                        }
-                    }
+            data = reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
+
+    private Calendar dataProcessingForInput(String data) { //in the end check validation of input of data after false turn of input
+        Calendar calendar = new Calendar();
+        String[] dateTime = data.split(" ");
+        String[] tempDate, tempTime;
+        String[] date = new String[]{"1", "1", "0", "0"};
+        String[] time = new String[]{"0", "0", "0", "0"};
+        if (formatInput.equals("1") || formatInput.equals("2")) {
+            tempDate = dateTime[0].split("/");
+            if (tempDate.length > 1) {
+                for (int i = 0; i < tempDate.length; i++) {
+                    if (!tempDate[i].equals("")) date[i] = tempDate[i];
                 }
-                calendar.setDay(Integer.parseInt(date[0]));
-                calendar.setMonth(Integer.parseInt(date[1]));
-                calendar.setYear(Integer.parseInt(date[2]));
-                calendar.setHour(Integer.parseInt(time[0]));
-                calendar.setMinute(Integer.parseInt(time[1]));
-                calendar.setSecond(Integer.parseInt(time[2]));
-                calendar.setMillisecond(Integer.parseInt(time[3]));
-                if (!DateValidation.dateValidation(calendar)) {
-                    throw new IncorrectInputException(); //enter new date instead of exception
+            } else date[2] = tempDate[0];
+            if (dateTime.length > 1) {
+                tempTime = dateTime[1].split(":");
+                for (int i = 0; i < tempTime.length; i++) {
+                    if (!tempTime[i].equals("")) time[i] = tempTime[i];
                 }
             }
-        } catch (IncorrectInputException e) {
-            e.printStackTrace();
+            if (formatInput.equals("1")) {
+                calendar.setDay(Integer.parseInt(date[0]));
+                calendar.setMonth(Integer.parseInt(date[1]));
+            }
+            if (formatInput.equals("2")) {
+                calendar.setDay(Integer.parseInt(date[1]));
+                calendar.setMonth(Integer.parseInt(date[0]));
+            }
+        }
+        if (formatInput.equals("3") || formatInput.equals("4")) {
+            if (dateTime.length > 2) {
+                if (formatInput.equals("3")) {
+                    date[0] = dateTime[1];
+                    for (int i = 0; i < 12; i++) {
+                        if (MONTHS.get(i).toLowerCase(Locale.ROOT).equals(dateTime[0].toLowerCase()))
+                            date[1] = String.valueOf(i + 1);
+                    }
+                }
+                if (formatInput.equals("4")) {
+                    date[0] = dateTime[0];
+                    for (int i = 0; i < 12; i++) {
+                        if (MONTHS.get(i).toLowerCase(Locale.ROOT).equals(dateTime[1].toLowerCase()))
+                            date[1] = String.valueOf(i + 1);
+                    }
+                }
+                date[2] = dateTime[2];
+            }
+            if (dateTime.length <= 2) {
+                if (dateTime.length == 2) {
+                    tempTime = dateTime[dateTime.length - 1].split(":");
+                    for (int i = 0; i < tempTime.length; i++) {
+                        if (!tempTime[i].equals("")) time[i] = tempTime[i];
+                    }
+                }
+                date[2] = dateTime[0];
+            }
+            calendar.setDay(Integer.parseInt(date[0]));
+            calendar.setMonth(Integer.parseInt(date[1]));
+        }
+        calendar.setYear(Integer.parseInt(date[2]));
+        calendar.setHour(Integer.parseInt(time[0]));
+        calendar.setMinute(Integer.parseInt(time[1]));
+        calendar.setSecond(Integer.parseInt(time[2]));
+        calendar.setMillisecond(Integer.parseInt(time[3]));
+        if (!DateValidation.dateValidation(calendar)) {
+            newInput();
         }
         return calendar;
     }
 
+    private void newInput() {
+        System.out.println("Sorry, your input was incorrect. Try one more time");
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        dataProcessingForInput(dataInput(reader, "new"));
+    }
+
     private String outputDate(Calendar calendar) {
-        String date = "";
-        switch (formatOutput) {
-            case "1":
-                date = calendar.getDay() + "/" + calendar.getMonth() + "/" + calendar.getYear() + " " +
-                        calendar.getHour() + ":" + calendar.getMinute() + ":" + calendar.getSecond() + ":" + calendar.getMillisecond();
-                break;
-            case "2":
-                date = calendar.getMonth() + "/" + calendar.getDay() + "/" + calendar.getYear() + " " +
-                        calendar.getHour() + ":" + calendar.getMinute() + ":" + calendar.getSecond() + ":" + calendar.getMillisecond();
-                break;
-            case "3":
-                //change month on validation class in other function
-
-                break;
-            case "4":
-
-                break;
-        }
-        return date;
+        return switch (formatOutput) {
+            case "1" -> calendar.getDay() + "/" + calendar.getMonth() + "/" + calendar.getYear() + " " +
+                    calendar.getHour() + ":" + calendar.getMinute() + ":" + calendar.getSecond() + ":" + calendar.getMillisecond();
+            case "2" -> calendar.getMonth() + "/" + calendar.getDay() + "/" + calendar.getYear() + " " +
+                    calendar.getHour() + ":" + calendar.getMinute() + ":" + calendar.getSecond() + ":" + calendar.getMillisecond();
+            case "3" -> MONTHS.get(calendar.getMonth() - 1) + " " + calendar.getDay() + " " + calendar.getYear() + " " +
+                    calendar.getHour() + ":" + calendar.getMinute() + ":" + calendar.getSecond() + ":" + calendar.getMillisecond();
+            case "4" -> calendar.getDay() + " " + MONTHS.get(calendar.getMonth() - 1) + " " + calendar.getYear() + " " +
+                    calendar.getHour() + ":" + calendar.getMinute() + ":" + calendar.getSecond() + ":" + calendar.getMillisecond();
+            default -> "";
+        };
     }
 
     private String changeIOFormat(BufferedReader reader, String position) {
