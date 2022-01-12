@@ -3,19 +3,17 @@ package ua.com.alevel.view;
 import ua.com.alevel.entity.Calendar;
 import ua.com.alevel.service.CalendarService;
 import ua.com.alevel.validation.DateValidation;
-import ua.com.alevel.validation.IncorrectInputException;
 
-import javax.accessibility.AccessibleKeyBinding;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import static ua.com.alevel.datehelper.DateHelper.MONTHS;
 
 public class CalendarController {
-
-    CalendarService calendarService = new CalendarService();
 
     private String formatInput = "1";
     private String formatOutput = "1";
@@ -40,7 +38,7 @@ public class CalendarController {
         System.out.println("1 - change input format");
         System.out.println("2 - change output format");
         System.out.println("3 - difference between dates");
-        System.out.println("4 - sum of dates");
+        System.out.println("4 - add smth to date");
         System.out.println("5 - subtraction from date");
         System.out.println("6 - sort dates asc");
         System.out.println("7 - sort dates desc");
@@ -60,24 +58,16 @@ public class CalendarController {
                 difference(reader);
                 break;
             case "4":
-                String firstSource = dataInput(reader, "first");
-                while (!DateValidation.sourceDateValidation(firstSource, formatInput)) {
-                    //maybe check newInput() (delete last line from that function)
-                    System.out.println("Sorry, your input was incorrect. Try one more time");
-                    firstSource = dataInput(reader, "new");
-                }
-                Calendar firstDate = dataProcessingForInput(firstSource);
-                System.out.println(outputDate(firstDate));
-//                intersection(reader);
+                add(reader);
                 break;
             case "5":
-//                sortDesc(reader);
+                subtraction(reader);
                 break;
             case "6":
-//                sortAsc(reader);
+                sort(reader, true);
                 break;
             case "7":
-//                get(reader);
+                sort(reader, false);
                 break;
             case "0":
                 System.exit(0);
@@ -85,38 +75,144 @@ public class CalendarController {
         runNavigation();
     }
 
+    private void sort(BufferedReader reader, boolean asc) {
+        System.out.println("Enter count of dates to compare them ascended:");
+        try {
+            int source= Integer.parseInt(reader.readLine());
+            List<Calendar> dates=new ArrayList<>();
+            for (int i = 0; i < source; i++) {
+                System.out.println("Enter "+(i+1)+". data");
+                String sourceOfData=reader.readLine();
+                if(DateValidation.sourceDateValidation(sourceOfData, formatInput)){
+                    Calendar data =dataProcessingForInput(sourceOfData);
+                    if(DateValidation.dateValidation(data)){
+                        dates.add(data);
+                        System.out.println(outputDate(data));
+                    } else {
+                        System.out.println("Your data was declined, because it`s non-existing");
+                    }
+                } else {
+                    System.out.println("Your data was declined, because format was false");
+                }
+            }
+            if(!dates.isEmpty()){
+                if(asc){
+                    System.out.println("\nYour asc sorted dates:");
+                    CalendarService.sortData(dates, true).forEach(x->System.out.println(outputDate(x)));
+                } else {
+                    System.out.println("\nYour desc sorted dates:");
+                    CalendarService.sortData(dates, false).forEach(x->System.out.println(outputDate(x)));
+                }
+            } else {
+                System.out.println("Your list is empty\n Try one more time");
+                sort(reader, true);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void subtraction(BufferedReader reader) {
+        try {
+            System.out.println("Enter date");
+            String source = reader.readLine();
+            if (DateValidation.sourceDateValidation(source, formatInput)) {
+                Calendar date = dataProcessingForInput(source);
+                if (DateValidation.dateValidation(date)) {
+                    System.out.println(outputDate(date));
+                    System.out.println("What do you want to subtract from your current date?\n 1 - milliseconds; 2 - seconds; 3 - minutes;\n " +
+                            "4 - hours; 5 - days; 6 - years;");
+                    String position = reader.readLine();
+                    System.out.println("How many??");
+                    String count = reader.readLine();
+                    String result = CalendarService.subtraction(date, Integer.parseInt(count), Integer.parseInt(position));
+                    if (result.equals("-2")) {
+                        System.out.println("False turn \n Try one more time");
+                        subtraction(reader);
+                    } else System.out.println(outputDate(date.convertMillisecondsToDateTime(Long.parseLong(result))));
+                } else{
+                    System.out.println("Sorry, but your date was non-valid\n Please, try one more time");
+                    subtraction(reader);
+                }
+            } else{
+                System.out.println("Sorry, but your input was non-valid\n Please, try one more time");
+                subtraction(reader);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void add(BufferedReader reader) {
+        try {
+            System.out.println("Enter date");
+            String source = reader.readLine();
+            if (DateValidation.sourceDateValidation(source, formatInput)) {
+                Calendar date = dataProcessingForInput(source);
+                if (DateValidation.dateValidation(date)) {
+                    System.out.println(outputDate(date));
+                    System.out.println("What do you want to add to your current date?\n 1 - milliseconds; 2 - seconds; 3 - minutes;\n " +
+                            "4 - hours; 5 - days; 6 - years;");
+                    String position = reader.readLine();
+                    System.out.println("How many??");
+                    String count = reader.readLine();
+                    String result = CalendarService.add(date, Integer.parseInt(count), Integer.parseInt(position));
+                    System.out.println(outputDate(date.convertMillisecondsToDateTime(Long.parseLong(result))));
+                } else{
+                    System.out.println("Sorry, but your date was non-valid\n Please, try one more time");
+                    add(reader);
+                }
+            } else{
+                System.out.println("Sorry, but your input was non-valid\n Please, try one more time");
+                add(reader);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void difference(BufferedReader reader) {
-        String firstSource = dataInput(reader, "first");
-        Calendar firstDate = dataProcessingForInput(firstSource);
-        System.out.println(outputDate(firstDate));
-
-        String secondSource = dataInput(reader, "second");
-        Calendar secondDate = dataProcessingForInput(secondSource);
-        System.out.println(outputDate(secondDate));
-        String result = "";
-        String position;
-        System.out.println("in\n 1 - milliseconds; 2 - seconds; 3 - minutes;\n 4 - hours; 5 - days; 6 - years;");
+        System.out.println("Enter FIRST date");
         try {
-            position = reader.readLine();
-            result = CalendarService.difference(firstDate, secondDate, Integer.parseInt(position));
-            System.out.println("difference= " + result);
+            String firstSource = reader.readLine();
+            if (DateValidation.sourceDateValidation(firstSource, formatInput)) {
+                Calendar firstDate = dataProcessingForInput(firstSource);
+                if (DateValidation.dateValidation(firstDate)) {
+                    System.out.println(outputDate(firstDate));
+                    System.out.println("Enter SECOND date");
+                    String secondSource = reader.readLine();
+                    if (DateValidation.sourceDateValidation(secondSource, formatInput)) {
+                        Calendar secondDate = dataProcessingForInput(secondSource);
+                        if (DateValidation.dateValidation(secondDate)) {
+                            System.out.println(outputDate(secondDate));
+                            System.out.println("in\n 1 - milliseconds; 2 - seconds; 3 - minutes;\n 4 - hours; 5 - days; 6 - years;");
+                            String position = reader.readLine();
+                            String result = CalendarService.difference(firstDate, secondDate, Integer.parseInt(position));
+                            System.out.println("difference= " + result);
+                        } else{
+                            System.out.println("Sorry, but your date was non-valid\n Please, try one more time");
+                            difference(reader);
+                        }
+
+                    } else{
+                        System.out.println("Sorry, but your input was non-valid\n Please, try one more time");
+                        difference(reader);
+                    }
+                } else{
+                    System.out.println("Sorry, but your date was non-valid\n Please, try one more time");
+                    difference(reader);
+                }
+            } else{
+                System.out.println("Sorry, but your input was non-valid\n Please, try one more time");
+                difference(reader);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
-    private String dataInput(BufferedReader reader, String source) {
-        System.out.println("Enter " + source + " data");
-        String data = "";
-        try {
-            data = reader.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return data;
-    }
-
-    private Calendar dataProcessingForInput(String data) { //in the end check validation of input of data after false turn of input
+    private Calendar dataProcessingForInput(String data) {
         Calendar calendar = new Calendar();
         String[] dateTime = data.split(" ");
         String[] tempDate, tempTime;
@@ -179,27 +275,19 @@ public class CalendarController {
         calendar.setMinute(Integer.parseInt(time[1]));
         calendar.setSecond(Integer.parseInt(time[2]));
         calendar.setMillisecond(Integer.parseInt(time[3]));
-        if (!DateValidation.dateValidation(calendar)) {
-            newInput();
-        }
         return calendar;
     }
 
-    private void newInput() {
-        System.out.println("Sorry, your input was incorrect. Try one more time");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        dataProcessingForInput(dataInput(reader, "new"));
-    }
-
     private String outputDate(Calendar calendar) {
+        String source = "Date: ";
         return switch (formatOutput) {
-            case "1" -> calendar.getDay() + "/" + calendar.getMonth() + "/" + calendar.getYear() + " " +
+            case "1" -> source + calendar.getDay() + "/" + calendar.getMonth() + "/" + calendar.getYear() + " " +
                     calendar.getHour() + ":" + calendar.getMinute() + ":" + calendar.getSecond() + ":" + calendar.getMillisecond();
-            case "2" -> calendar.getMonth() + "/" + calendar.getDay() + "/" + calendar.getYear() + " " +
+            case "2" -> source + calendar.getMonth() + "/" + calendar.getDay() + "/" + calendar.getYear() + " " +
                     calendar.getHour() + ":" + calendar.getMinute() + ":" + calendar.getSecond() + ":" + calendar.getMillisecond();
-            case "3" -> MONTHS.get(calendar.getMonth() - 1) + " " + calendar.getDay() + " " + calendar.getYear() + " " +
+            case "3" -> source + MONTHS.get(calendar.getMonth() - 1) + " " + calendar.getDay() + " " + calendar.getYear() + " " +
                     calendar.getHour() + ":" + calendar.getMinute() + ":" + calendar.getSecond() + ":" + calendar.getMillisecond();
-            case "4" -> calendar.getDay() + " " + MONTHS.get(calendar.getMonth() - 1) + " " + calendar.getYear() + " " +
+            case "4" -> source + calendar.getDay() + " " + MONTHS.get(calendar.getMonth() - 1) + " " + calendar.getYear() + " " +
                     calendar.getHour() + ":" + calendar.getMinute() + ":" + calendar.getSecond() + ":" + calendar.getMillisecond();
             default -> "";
         };

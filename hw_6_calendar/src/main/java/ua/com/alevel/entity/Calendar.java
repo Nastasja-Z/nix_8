@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 import static ua.com.alevel.datehelper.DateHelper.*;
 
 @Getter
@@ -40,7 +42,7 @@ public class Calendar {
             if (i % 4 == 0) countOfLeapYears++;
         }
         timeStamp += countOfLeapYears * DAY + DAY * sum +
-                365 * DAY * (year - 1);
+                365 * DAY * (year);
         return timeStamp;
     }
 
@@ -64,16 +66,68 @@ public class Calendar {
         return convertDateTimeToMilliseconds() / YEAR;
     }
 
-    @Override
-    public String toString() {
-        return "Calendar{" +
-                "year=" + year +
-                ", month=" + month +
-                ", day=" + day +
-                ", hour=" + hour +
-                ", minute=" + minute +
-                ", second=" + second +
-                ", millisecond=" + millisecond +
-                '}';
+    public Calendar convertMillisecondsToDateTime(long timeStamp) {
+        int currentCountOfDays = (int) (timeStamp / DAY);
+        if (timeStamp == -1) return this;
+        if (timeStamp >= YEAR) {
+            year = (int) ((timeStamp / YEAR));
+            timeStamp = timeStamp % YEAR;
+        }
+        int temp = year / 4 / 365;
+        year -= temp;
+        int countOfLeapYears = 0;
+        for (int i = 0; i < year; i++) {
+            if (i % 4 == 0) countOfLeapYears++;
+        }
+        temp = countOfLeapYears % 365;
+        int countOfDaysFromTimeStamp = (int) (timeStamp / DAY);
+        boolean check = true;
+        if (countOfDaysFromTimeStamp - temp == -1) {
+            countOfDaysFromTimeStamp = countOfDaysFromTimeStamp - temp;
+            check = false;
+        } else
+            countOfDaysFromTimeStamp = countOfDaysFromTimeStamp - temp + 1;
+        if (countOfDaysFromTimeStamp < 0 && check)
+            countOfDaysFromTimeStamp = 365 - Math.abs(countOfDaysFromTimeStamp);
+        if (countOfDaysFromTimeStamp < 0 && !check)
+            countOfDaysFromTimeStamp = 366 - Math.abs(countOfDaysFromTimeStamp);
+        int before = 0, current = 0;
+        List<Integer> currentList;
+        if (isLeap()) {
+            currentList = LEAP_YEARS_MONTHS;
+        } else {
+            currentList = NON_LEAP_YEARS_MONTHS;
+        }
+        for (int i = 0; i <= currentList.size(); i++) {
+            if (countOfDaysFromTimeStamp > before) {
+                current = before;
+                before += currentList.get(i);
+            } else {
+                month = i;
+                countOfDaysFromTimeStamp -= current;
+                break;
+            }
+        }
+        day = countOfDaysFromTimeStamp;
+        timeStamp = timeStamp % DAY;
+        if (timeStamp >= HOUR) {
+            hour = (int) (timeStamp / HOUR);
+            timeStamp = timeStamp % HOUR;
+        }
+        if (timeStamp >= MINUTE) {
+            minute = (int) (timeStamp / MINUTE);
+            timeStamp = timeStamp % MINUTE;
+        }
+        if (timeStamp >= SECOND) {
+            second = (int) (timeStamp / SECOND);
+            timeStamp = timeStamp % SECOND;
+        }
+        millisecond = (int) timeStamp;
+        long x = this.convertDateTimeToMilliseconds();
+        int Days2 = (int) (x / DAY);
+        if (currentCountOfDays != Days2) {
+            year--;
+        }
+        return this;
     }
 }
