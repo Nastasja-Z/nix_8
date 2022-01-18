@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="utf-8">
+    <title>Product</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    <span th:text="${'New Shop'}"></span>
+                </div>
+                <div class="card-body">
+                    <form method="post" th:object="${shop}" th:action="@{/shops/new}">
+                        <div class="mb-3">
+                            <div class="form-group">
+                                <label for="shopName">Shop name</label>
+                                <input type="text" class="form-control" id="shopName" aria-describedby="name" placeholder="Enter shop name" th:field="*{name}">
+                            </div>
+                            <div class="form-group">
+                                <label for="shopAddress">Product address</label>
+                                <input type="text" class="form-control" id="shopAddress" aria-describedby="address" placeholder="Enter shop address" th:field="*{address}">
+                            </div>
+                            <label for="type">Select status</label>
+                            <select class="form-control" id="type" th:field="*{status}">
+                                <option th:each="type : ${statuses}"
+                                        th:value="${type}"
+                                        th:text="${type}">
+                                </option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

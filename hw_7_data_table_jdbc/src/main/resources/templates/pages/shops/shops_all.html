@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container">
+        <div class="card mt-4">
+            <div class="card-header">
+                <h1>Shops</h1><br>
+                <a class="btn btn-primary" href="#" role="button" th:href="@{/shops/new}">Add new shop</a>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>name</th>
+                        <th>address</th>
+                        <th>status</th>
+                        <th>countOfProducts</th>
+                        <th>add product</th>
+                        <th>delete</th>
+                        <th>update</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="shop : ${shops}">
+                        <td th:text="${shop.getId()}"></td>
+                        <td th:text="${shop.getName()}"></td>
+                        <td th:text="${shop.getAddress()}"></td>
+                        <td th:text="${shop.getStatus()}"></td>
+                        <td>
+                            <a th:href="@{'/products/' + ${shop.getId()}}" th:text="${shop.getCountOfProducts()}">count</a>
+                        </td>
+                        <td>
+                            <a type="button" class="btn btn-warning" data-bs-toggle="modal"
+                               data-bs-target="#staticBackdrop">
+                                add product
+                            </a>
+                            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"
+                                 data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                 aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <form method="post" th:object="${reference}" th:action="@{'/shops/product/' + ${shop.getId()}}">
+                                                <div class="mb-3">
+                                                    <label for="type">Select product</label>
+                                                    <select class="form-control" id="type" th:field="*{productId}">
+                                                        <option th:each="type : ${products}"
+                                                                th:value="${type.getId()}"
+                                                                th:text="${type.getName()}">
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <br>
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                Close
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <a th:href="@{'/shops/delete/' + ${shop.getId()}}" type="button" class="btn btn-danger">delete</a>
+                        </td>
+                        <td>update (like create)</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer">
+<!--
+                <a class="btn btn-primary" href="#" role="button" th:href="@{/shops/new}">Add new shop</a>
+-->
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

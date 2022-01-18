@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="utf-8">
+    <title>Product Details</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-2 mt-2">
+                <div class="card-header">
+                    Product details
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <!--<tr>
+                            <th>Image</th>
+                            <td>
+                                <img th:src="@{${book.getImageUrl()}}" width="120" height="160"/>
+                            </td>
+                        </tr>-->
+                        <tr>
+                            <th>Id</th>
+                            <td th:text="${shop.getId()}"></td>
+                        </tr>
+                        <tr>
+                            <th>Shop name</th>
+                            <td th:text="${shop.getName()}"></td>
+                        </tr>
+                        <tr>
+                            <th>Shop address</th>
+                            <td th:text="${shop.getAddress()}"></td>
+                        </tr>
+                        <tr>
+                            <th>Shop status</th>
+                            <td th:text="${shop.getStatus()}"></td>
+                        </tr>
+                        <tr>
+                            <th>You can find there:</th>
+                            <td>
+                                <table>
+                                    <tr th:each="product : ${products}">
+                                        <td th:text="${product.getName()}"></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
