@@ -23,5 +23,6 @@ Tests run: 0, Failures: 0, Errors: 0, Skipped: 0
 
 hw_4 = 8
 hw_5 = 9
+hw_6 = 9
 
 module_2 = 9
