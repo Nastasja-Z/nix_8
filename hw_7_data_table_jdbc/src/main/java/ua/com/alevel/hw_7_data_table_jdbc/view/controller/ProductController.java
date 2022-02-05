@@ -15,6 +15,8 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductController {
 
+    //FACADE
+
     private final ProductService productService;
     private final ShopService shopService;
 
@@ -55,11 +57,18 @@ public class ProductController {
     }
 
     @PostMapping("/shop/{id}")
-    //check it (добавляет все записи к первой строке)
     public String addToShop(@ModelAttribute("reference") ReferenceViewDto referenceViewDto, @PathVariable Integer id) {
         referenceViewDto.setProductId(id);
         productService.createReferenceConnection(referenceViewDto);
         return "redirect:/products";
+    }
+
+    @GetMapping("/shop/{id}")
+    public String redirectToAddToShop(@PathVariable("id") Integer id, Model model) {
+        model.addAttribute("product", productService.findById(id));
+        model.addAttribute("shops", shopService.findAllPrepareView());
+        model.addAttribute("reference", new ReferenceViewDto());
+        return "pages/products/product_add_shop";
     }
 
     @GetMapping("/delete/{id}")

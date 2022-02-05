@@ -1,11 +1,11 @@
 package ua.com.alevel.hw_7_data_table_jdbc.service;
 
+import ua.com.alevel.hw_7_data_table_jdbc.datatable.DataTableRequest;
+import ua.com.alevel.hw_7_data_table_jdbc.datatable.DataTableResponse;
 import ua.com.alevel.hw_7_data_table_jdbc.persistence.entity.BaseEntity;
-import ua.com.alevel.hw_7_data_table_jdbc.persistence.entity.Product;
 import ua.com.alevel.hw_7_data_table_jdbc.view.dto.ReferenceViewDto;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface BaseService<ENTITY extends BaseEntity> {
 
@@ -15,5 +15,5 @@ public interface BaseService<ENTITY extends BaseEntity> {
     ENTITY findById(Integer id);
     <VIEW extends ENTITY> List<VIEW> findAllPrepareView();
     void createReferenceConnection(ReferenceViewDto entity);
-    //DataTableResponse<ENTITY> findAll(DataTableRequest request);
+    DataTableResponse<ENTITY> findAll(DataTableRequest request);
 }

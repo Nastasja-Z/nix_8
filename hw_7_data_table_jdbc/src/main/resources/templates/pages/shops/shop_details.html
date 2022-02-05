@@ -11,6 +11,9 @@
 
 <div layout:fragment="content">
 
+    <div> <a th:href="@{/shops}" type="button" class="btn btn-info">back</a>
+    </div>
+    <br><br>
     <div class="row">
         <div class="col-12">
             <div class="card mb-2 mt-2">
@@ -19,12 +22,6 @@
                 </div>
                 <div class="card-body">
                     <table class="table table-hover">
-                        <!--<tr>
-                            <th>Image</th>
-                            <td>
-                                <img th:src="@{${book.getImageUrl()}}" width="120" height="160"/>
-                            </td>
-                        </tr>-->
                         <tr>
                             <th>Id</th>
                             <td th:text="${shop.getId()}"></td>
@@ -56,3 +53,4 @@
             </div>
         </div>
     </div>
+</div>

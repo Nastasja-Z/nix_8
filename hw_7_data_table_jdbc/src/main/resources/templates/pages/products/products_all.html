@@ -40,46 +40,16 @@
                         <td th:text="${product.getWeight()}"></td>
                         <td th:text="${product.getPrice()}"></td>
                         <td>
-                            <a th:href="@{'/products/details/' + ${product.getId()}}" type="button" class="btn btn-primary">details</a>
+                            <a th:href="@{'/products/details/' + ${product.getId()}}" type="button"
+                               class="btn btn-primary">details</a>
                         </td>
                         <td>
                             <a th:href="@{'/shops/' + ${product.getId()}}"
                                th:text="${product.getCountOfShops()}">count</a>
                         </td>
                         <td>
-                            <!--ПЕРЕДЕЛАТЬ С findById-->
-                            <a type="button" class="btn btn-warning" data-bs-toggle="modal"
-                               data-bs-target="#staticBackdrop">
-                                add to shop
-                            </a>
-                            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"
-                                 data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
-                                 aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-body">
-                                            <form method="post" th:object="${reference}" th:action="@{'/products/shop/' + ${product.getId()}}">
-                                                <div class="mb-3">
-                                                    <label for="type">Select shop</label>
-                                                    <select class="form-control" id="type" th:field="*{shopId}">
-                                                        <option th:each="type : ${shops}"
-                                                                th:value="${type.getId()}"
-                                                                th:text="${type.getName()}">
-                                                        </option>
-                                                    </select>
-                                                </div>
-                                                <br>
-                                                <button type="submit" class="btn btn-primary">Submit</button>
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                                Close
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <a th:href="@{'/products/shop/' + ${product.getId()}}" type="button"
+                               class="btn btn-warning">add to shop</a>
                         </td>
                         <td>
                             <a th:href="@{'/products/delete/' + ${product.getId()}}" type="button"
@@ -91,7 +61,7 @@
                 </table>
             </div>
             <div class="card-footer">
-<!--                <a class="btn btn-primary" href="#" role="button" th:href="@{/products/new}">Add new product</a>-->
+                <!--                <a class="btn btn-primary" href="#" role="button" th:href="@{/products/new}">Add new product</a>-->
             </div>
         </div>
     </div>

@@ -1,6 +1,9 @@
 package ua.com.alevel.hw_7_data_table_jdbc.persistence.dao.impl;
 
+import org.apache.commons.collections4.MapUtils;
 import org.springframework.stereotype.Service;
+import ua.com.alevel.hw_7_data_table_jdbc.datatable.DataTableRequest;
+import ua.com.alevel.hw_7_data_table_jdbc.datatable.DataTableResponse;
 import ua.com.alevel.hw_7_data_table_jdbc.persistence.dao.ProductDao;
 import ua.com.alevel.hw_7_data_table_jdbc.persistence.entity.Category;
 import ua.com.alevel.hw_7_data_table_jdbc.persistence.entity.Product;
@@ -14,7 +17,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProductDaoImpl implements ProductDao {
@@ -41,7 +43,14 @@ public class ProductDaoImpl implements ProductDao {
             "  where sp.shop_id= ? \n" +
             "group by p.id";
 
-    private static final String INSERT_REFERENCED_TABLE = "insert into shop_product values (?, ?)";
+//    private static final String INSERT_REFERENCED_TABLE = "insert into shop_product values (?, ?)";
+private static final String INSERT_REFERENCED_TABLE = "INSERT INTO shop_product (shop_id, product_id) values(?, ?)";
+        //"values((select s.id = ? from shops as s), (select p.id = ? from products as p))";
+        //"values(select s.id from shops as s where s.id = ?, select p.id from products as p where p.id = ?)";
+
+        /*"SELECT s.id, p.id\n" +
+        "FROM shops s, products p\n" +
+        "WHERE s.id = ? AND p.id = ?;";*/
 
     @Override
     public void create(Product entity) {
@@ -58,7 +67,7 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     @Override
-    public void createReferenceConnection(ReferenceViewDto referenceViewDto) {
+    public void createReferencedConnection(ReferenceViewDto referenceViewDto) {
         try (PreparedStatement ps = storeFactory.getConnection().prepareStatement(INSERT_REFERENCED_TABLE)) {
             ps.setInt(1, referenceViewDto.getShopId());
             ps.setInt(2, referenceViewDto.getProductId());
@@ -66,6 +75,11 @@ public class ProductDaoImpl implements ProductDao {
         } catch (SQLException e) {
             System.out.println("sql error = " + e.getMessage());
         }
+    }
+
+    @Override
+    public long count() {
+        return 0;
     }
 
     @Override
@@ -132,6 +146,11 @@ public class ProductDaoImpl implements ProductDao {
             System.out.println("sql error = " + e.getMessage());
         }
         return products;
+    }
+
+    @Override
+    public DataTableResponse<Product> findAll(DataTableRequest request) {
+        return null;
     }
 
     @Override

@@ -1,6 +1,10 @@
 package ua.com.alevel.hw_7_data_table_jdbc.persistence.dao.impl;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Service;
+import ua.com.alevel.hw_7_data_table_jdbc.datatable.DataTableRequest;
+import ua.com.alevel.hw_7_data_table_jdbc.datatable.DataTableResponse;
 import ua.com.alevel.hw_7_data_table_jdbc.persistence.dao.ShopDao;
 import ua.com.alevel.hw_7_data_table_jdbc.persistence.entity.Shop;
 import ua.com.alevel.hw_7_data_table_jdbc.persistence.entity.ShopStatus;
@@ -13,8 +17,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 @Service
 public class ShopDaoImpl implements ShopDao {
@@ -41,7 +46,13 @@ public class ShopDaoImpl implements ShopDao {
             "  where sp.product_id= ? \n" +
             "group by s.id";
 
-    private static final String INSERT_REFERENCED_TABLE = "insert into shop_product values (?, ?)";
+    private static final String FIND_ALL_SHOPS_BY_PRODUCT_ID_QUERY = "select s.id, s.name, s.address, s.status \n" +
+            "from shops as s \n" +
+            "left join shop_product as sp on s.id = sp.shop_id \n" +
+            "  where sp.product_id= ";
+
+    private static final String INSERT_REFERENCED_TABLE = "INSERT INTO shop_product (shop_id, product_id) values(?, ?)";
+//    private static final String COUNT_SHOPS_QUERY = "select count(*) as row from shops";
 
     @Override
     public void create(Shop entity) {
@@ -56,7 +67,7 @@ public class ShopDaoImpl implements ShopDao {
     }
 
     @Override
-    public void createReferenceConnection(ReferenceViewDto referenceViewDto) {
+    public void createReferencedConnection(ReferenceViewDto referenceViewDto) {
         try (PreparedStatement ps = storeFactory.getConnection().prepareStatement(INSERT_REFERENCED_TABLE)) {
             ps.setInt(1, referenceViewDto.getShopId());
             ps.setInt(2, referenceViewDto.getProductId());
@@ -64,6 +75,20 @@ public class ShopDaoImpl implements ShopDao {
         } catch (SQLException e) {
             System.out.println("sql error = " + e.getMessage());
         }
+    }
+
+
+    @Override
+    public long count() { //????????
+        try(Statement statement = storeFactory.getConnection().createStatement();
+            ResultSet rs = statement.executeQuery("select count(*) as count from shops")) {
+            while (rs.next()) {
+                return rs.getLong("count");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     @Override
@@ -131,6 +156,56 @@ public class ShopDaoImpl implements ShopDao {
     }
 
     @Override
+    public DataTableResponse<Shop> findAll(DataTableRequest request) {
+        List<Shop> shops = new ArrayList<>();
+        Map<Object, Object> otherParamMap = new HashMap<>();
+
+        int limit = (request.getCurrentPage() - 1) * request.getPageSize();
+
+        String sql = "select id, name, address, status, count(shop_id) as count_of_products " +
+                "from shops as s left join shop_product as sp on s.id = sp.shop_id " +
+                "group by shop.id order by " +
+                request.getSort() + " " +
+                request.getOrder() + " limit " +
+                limit + "," +
+                request.getPageSize();
+
+
+        try(Statement statement = storeFactory.getConnection().createStatement();
+            ResultSet rs = statement.executeQuery(sql)) {
+            while (rs.next()) {
+                ShopResultSet shopResultSet = convertResultSetToSimpleShop(rs);
+                shops.add(shopResultSet.getShop());
+                otherParamMap.put(shopResultSet.getShop().getId(), shopResultSet.getProductCount());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        DataTableResponse<Shop> tableResponse = new DataTableResponse<>();
+        tableResponse.setItems(shops);
+        tableResponse.setOtherParamMap(otherParamMap);
+        return tableResponse;
+    }
+
+    @Override //??????????????
+    public Map<Integer, String> findAllByProductId(Integer productId) {
+        Map<Integer, String> map = new HashMap<>();
+        try(Statement statement = storeFactory.getConnection().createStatement();
+            ResultSet rs = statement.executeQuery(FIND_ALL_SHOPS_BY_PRODUCT_ID_QUERY + productId)) {
+            while (rs.next()) {
+                Integer id = rs.getInt("id");
+                String name = rs.getString("name");
+                //String lastName = rs.getString("last_name");
+                map.put(id, name);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return map;
+    }
+
+    @Override
     public  List<ShopViewDto> findAllPrepareView() {
         List<ShopViewDto> shops = new ArrayList<>();
         try (Statement statement = storeFactory.getConnection().createStatement();
@@ -173,12 +248,28 @@ public class ShopDaoImpl implements ShopDao {
         return shop;
     }
 
+    private ShopResultSet convertResultSetToSimpleShop(ResultSet rs) throws SQLException {
+        int id = rs.getInt("id");
+        String name = rs.getString("name");
+        String address = rs.getString("address");
+        String status = rs.getString("status");
+        int countOfProducts = rs.getInt("count_of_products");
+
+        Shop shop = new ShopViewDto();
+        shop.setId(id);
+        shop.setName(name);
+        shop.setAddress(address);
+        shop.setStatus(ShopStatus.valueOf(status));
+        return new ShopResultSet(shop,countOfProducts);
+    }
+
     private ShopViewDto convertResultSetToShopViewDto(ResultSet rs) throws SQLException {
         int id = rs.getInt("id");
         String name = rs.getString("name");
         String address = rs.getString("address");
         String status = rs.getString("status");
         int countOfProducts = rs.getInt("count_of_products");
+
         ShopViewDto shop = new ShopViewDto();
         shop.setId(id);
         shop.setName(name);
@@ -186,5 +277,18 @@ public class ShopDaoImpl implements ShopDao {
         shop.setStatus(ShopStatus.valueOf(status));
         shop.setCountOfProducts(countOfProducts);
         return shop;
+    }
+
+    @Getter
+    private static class ShopResultSet {
+
+        private final Shop shop;
+        private final int productCount;
+
+        private ShopResultSet(Shop shop, int productCount) {
+            this.shop = shop;
+            this.productCount = productCount;
+        }
+
     }
 }

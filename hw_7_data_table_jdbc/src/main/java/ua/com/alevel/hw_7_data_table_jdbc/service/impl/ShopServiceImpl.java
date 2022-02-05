@@ -1,15 +1,18 @@
 package ua.com.alevel.hw_7_data_table_jdbc.service.impl;
 
 import org.springframework.stereotype.Service;
+import ua.com.alevel.hw_7_data_table_jdbc.datatable.DataTableRequest;
+import ua.com.alevel.hw_7_data_table_jdbc.datatable.DataTableResponse;
 import ua.com.alevel.hw_7_data_table_jdbc.exception.EntityExistException;
 import ua.com.alevel.hw_7_data_table_jdbc.persistence.dao.ShopDao;
 import ua.com.alevel.hw_7_data_table_jdbc.persistence.entity.Shop;
 import ua.com.alevel.hw_7_data_table_jdbc.service.ShopService;
+import ua.com.alevel.hw_7_data_table_jdbc.util.WebResponseUtil;
 import ua.com.alevel.hw_7_data_table_jdbc.view.dto.ReferenceViewDto;
 import ua.com.alevel.hw_7_data_table_jdbc.view.dto.ShopViewDto;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 @Service
 public class ShopServiceImpl implements ShopService {
@@ -47,7 +50,20 @@ public class ShopServiceImpl implements ShopService {
     public void createReferenceConnection(ReferenceViewDto referenceViewDto) {
         checkByExist(referenceViewDto.getShopId());
         checkByExist(referenceViewDto.getProductId());
-        shopDao.createReferenceConnection(referenceViewDto);
+        shopDao.createReferencedConnection(referenceViewDto);
+    }
+
+    @Override
+    public DataTableResponse<Shop> findAll(DataTableRequest request) {
+        DataTableResponse<Shop> dataTableResponse = shopDao.findAll(request);
+        long count = shopDao.count();
+        WebResponseUtil.initDataTableResponse(request, dataTableResponse, count);
+        return dataTableResponse;
+    }
+
+    @Override
+    public Map<Integer, String> findAllByProductId(Integer productId) {
+        return shopDao.findAllByProductId(productId);
     }
 
     @Override

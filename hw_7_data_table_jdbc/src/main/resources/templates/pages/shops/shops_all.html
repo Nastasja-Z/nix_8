@@ -40,38 +40,8 @@
                             <a th:href="@{'/products/' + ${shop.getId()}}" th:text="${shop.getCountOfProducts()}">count</a>
                         </td>
                         <td>
-                            <a type="button" class="btn btn-warning" data-bs-toggle="modal"
-                               data-bs-target="#staticBackdrop">
-                                add product
-                            </a>
-                            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"
-                                 data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
-                                 aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-body">
-                                            <form method="post" th:object="${reference}" th:action="@{'/shops/product/' + ${shop.getId()}}">
-                                                <div class="mb-3">
-                                                    <label for="type">Select product</label>
-                                                    <select class="form-control" id="type" th:field="*{productId}">
-                                                        <option th:each="type : ${products}"
-                                                                th:value="${type.getId()}"
-                                                                th:text="${type.getName()}">
-                                                        </option>
-                                                    </select>
-                                                </div>
-                                                <br>
-                                                <button type="submit" class="btn btn-primary">Submit</button>
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                                Close
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <a th:href="@{'/shops/product/' + ${shop.getId()}}" type="button"
+                               class="btn btn-warning">add product</a>
                         </td>
                         <td>
                             <a th:href="@{'/shops/delete/' + ${shop.getId()}}" type="button" class="btn btn-danger">delete</a>

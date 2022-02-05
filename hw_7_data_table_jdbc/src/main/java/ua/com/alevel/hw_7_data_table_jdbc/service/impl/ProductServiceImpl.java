@@ -1,6 +1,8 @@
 package ua.com.alevel.hw_7_data_table_jdbc.service.impl;
 
 import org.springframework.stereotype.Service;
+import ua.com.alevel.hw_7_data_table_jdbc.datatable.DataTableRequest;
+import ua.com.alevel.hw_7_data_table_jdbc.datatable.DataTableResponse;
 import ua.com.alevel.hw_7_data_table_jdbc.exception.EntityExistException;
 import ua.com.alevel.hw_7_data_table_jdbc.persistence.dao.ProductDao;
 import ua.com.alevel.hw_7_data_table_jdbc.persistence.entity.Product;
@@ -9,7 +11,6 @@ import ua.com.alevel.hw_7_data_table_jdbc.view.dto.ProductViewDto;
 import ua.com.alevel.hw_7_data_table_jdbc.view.dto.ReferenceViewDto;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -47,7 +48,12 @@ public class ProductServiceImpl implements ProductService {
     public void createReferenceConnection(ReferenceViewDto referenceViewDto) {
         checkByExist(referenceViewDto.getShopId());
         checkByExist(referenceViewDto.getProductId());
-        productDao.createReferenceConnection(referenceViewDto);
+        productDao.createReferencedConnection(referenceViewDto);
+    }
+
+    @Override //real
+    public DataTableResponse<Product> findAll(DataTableRequest request) {
+        return null;
     }
 
     @Override
