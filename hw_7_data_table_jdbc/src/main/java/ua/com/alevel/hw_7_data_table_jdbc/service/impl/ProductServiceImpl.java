@@ -6,11 +6,15 @@ import ua.com.alevel.hw_7_data_table_jdbc.datatable.DataTableResponse;
 import ua.com.alevel.hw_7_data_table_jdbc.exception.EntityExistException;
 import ua.com.alevel.hw_7_data_table_jdbc.persistence.dao.ProductDao;
 import ua.com.alevel.hw_7_data_table_jdbc.persistence.entity.Product;
+import ua.com.alevel.hw_7_data_table_jdbc.persistence.entity.Shop;
 import ua.com.alevel.hw_7_data_table_jdbc.service.ProductService;
+import ua.com.alevel.hw_7_data_table_jdbc.util.WebResponseUtil;
 import ua.com.alevel.hw_7_data_table_jdbc.view.dto.ProductViewDto;
 import ua.com.alevel.hw_7_data_table_jdbc.view.dto.ReferenceViewDto;
+import ua.com.alevel.hw_7_data_table_jdbc.view.dto.response.product.ProductResponseDto;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -51,22 +55,34 @@ public class ProductServiceImpl implements ProductService {
         productDao.createReferencedConnection(referenceViewDto);
     }
 
-    @Override //real
+    @Override
     public DataTableResponse<Product> findAll(DataTableRequest request) {
-        return null;
+        DataTableResponse<Product> dataTableResponse = productDao.findAll(request);
+        long count = productDao.count();
+        WebResponseUtil.initDataTableResponse(request, dataTableResponse, count);
+        return dataTableResponse;
     }
 
     @Override
-    public List<ProductViewDto> findAllPrepareView() {
-        return productDao.findAllPrepareView();
+    public List<Shop> findAllByNotIn(Integer id) {
+        return productDao.findAllByNotIn(id);
     }
 
     @Override
-    public List<ProductViewDto> findAllPrepareViewByShop(Integer shopId) {
-        return productDao.findAllPrepareViewByShop(shopId);
+    public DataTableResponse<Product> findAllPrepareViewByShop(DataTableRequest request, int id) {
+        DataTableResponse<Product> response = productDao.findAllPrepareViewByShop(request, id);
+        long count = productDao.countByReferencedId(id);
+        WebResponseUtil.initDataTableResponse(request, response, count);
+        return response;
     }
 
-    private void checkByExist(Integer id) {
+    @Override
+    public Map<Integer, String> findAllByShopId(Integer shopId) {
+        return productDao.findAllByShopId(shopId);
+    }
+
+    @Override
+    public void checkByExist(Integer id) {
         if (!productDao.existById(id)) {
             throw new EntityExistException("entity not found");
         }

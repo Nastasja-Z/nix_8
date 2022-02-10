@@ -1,4 +1,42 @@
 <!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/data_table_layout}">
+<head>
+    <meta charset="utf-8">
+    <title>shops</title>
+</head>
+<body>
+
+<div layout:fragment="data_table_content">
+
+    <tr th:each="shop,iter : ${pageData.getItems()}">
+        <td th:text="${iter.count}"></td>
+        <td th:text="${shop.getName()}"></td>
+        <td th:text="${shop.getAddress()}"></td>
+        <td th:text="${shop.getStatus()}"></td>
+        <td>
+            <a th:href="@{'/products/' + ${shop.getId()}}" th:text="${shop.getCountOfProducts()}" type="button"
+               class="btn btn-link">count</a>
+            <!-- <a th:href="@{'/products?shopId=' + ${shop.getId()}}" th:text="${shop.getCountOfProducts()}" type="button"
+                class="btn btn-link">count</a>-->
+        </td>
+        <td>
+            <a th:href="@{'/shops/details/' + ${shop.getId()}}" type="button" class="btn btn-primary">details</a>
+        </td>
+        <td>
+            <a th:href="@{'/shops/delete/' + ${shop.getId()}}" type="button" class="btn btn-danger">delete</a>
+        </td>
+    </tr>
+
+</div>
+
+</body>
+</html>
+
+<!--
+<!DOCTYPE html>
 <html lang="en"
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
@@ -52,12 +90,12 @@
                 </table>
             </div>
             <div class="card-footer">
-<!--
+&lt;!&ndash;
                 <a class="btn btn-primary" href="#" role="button" th:href="@{/shops/new}">Add new shop</a>
--->
+&ndash;&gt;
             </div>
         </div>
     </div>
 </div>
 </body>
-</html>
+</html>-->

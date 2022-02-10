@@ -13,21 +13,23 @@
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    <span th:text="${'New Shop'}"></span>
+                    <span th:text="${'Update Shop'}"></span>
                 </div>
                 <div class="card-body">
-                    <form method="post" th:object="${shop}" th:action="@{/shops/new}">
+                    <form method="post" th:object="${shop}" th:action="@{'/shops/update/' + ${shop.getId()}}">
                         <div class="mb-3">
                             <div class="form-group">
                                 <label for="shopName">Shop name</label>
-                                <input type="text" class="form-control" id="shopName" aria-describedby="name" placeholder="Enter shop name" th:field="*{name}">
+                                <input type="text" class="form-control" id="shopName" aria-describedby="name"
+                                       placeholder="Enter shop name" th:field="*{name}" th:value="${shop.name}">
                             </div>
                             <div class="form-group">
                                 <label for="shopAddress">Shop address</label>
-                                <input type="text" class="form-control" id="shopAddress" aria-describedby="address" placeholder="Enter shop address" th:field="*{address}">
+                                <input type="text" class="form-control" id="shopAddress" aria-describedby="address"
+                                       placeholder="Enter shop address" th:field="*{address}" th:value="${shop.address}">
                             </div>
                             <label for="type">Select status</label>
-                            <select class="form-control" id="type" th:field="*{status}">
+                            <select class="form-control" id="type" th:field="*{status}" >
                                 <option th:each="type : ${statuses}"
                                         th:value="${type}"
                                         th:text="${type}">

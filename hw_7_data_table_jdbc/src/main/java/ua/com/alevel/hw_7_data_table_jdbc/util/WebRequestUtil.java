@@ -1,6 +1,5 @@
 package ua.com.alevel.hw_7_data_table_jdbc.util;
 
-import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import org.springframework.web.context.request.WebRequest;
@@ -9,7 +8,6 @@ import ua.com.alevel.hw_7_data_table_jdbc.datatable.DataTableRequest;
 import ua.com.alevel.hw_7_data_table_jdbc.view.dto.request.PageAndSizeData;
 import ua.com.alevel.hw_7_data_table_jdbc.view.dto.request.SortData;
 
-import java.util.Map;
 import java.util.Objects;
 
 public final class WebRequestUtil {
@@ -18,7 +16,7 @@ public final class WebRequestUtil {
     private static final String SIZE_PARAM = "size";
     private static final String SORT_PARAM = "sort";
     private static final String ORDER_PARAM = "order";
-    public static final String DEFAULT_SORT_PARAM_VALUE = "created";
+    public static final String DEFAULT_SORT_PARAM_VALUE = "name";
     public static final String DEFAULT_ORDER_PARAM_VALUE = "desc";
     public static final int DEFAULT_PAGE_PARAM_VALUE = 1;
     public static final int DEFAULT_SIZE_PARAM_VALUE = 10;

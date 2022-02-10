@@ -1,11 +1,12 @@
 package ua.com.alevel.hw_7_data_table_jdbc.persistence.dao.impl;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.stereotype.Service;
 import ua.com.alevel.hw_7_data_table_jdbc.datatable.DataTableRequest;
 import ua.com.alevel.hw_7_data_table_jdbc.datatable.DataTableResponse;
 import ua.com.alevel.hw_7_data_table_jdbc.persistence.dao.ShopDao;
+import ua.com.alevel.hw_7_data_table_jdbc.persistence.entity.BaseEntity;
+import ua.com.alevel.hw_7_data_table_jdbc.persistence.entity.Product;
 import ua.com.alevel.hw_7_data_table_jdbc.persistence.entity.Shop;
 import ua.com.alevel.hw_7_data_table_jdbc.persistence.entity.ShopStatus;
 import ua.com.alevel.hw_7_data_table_jdbc.store.ConnectionStoreFactory;
@@ -36,15 +37,15 @@ public class ShopDaoImpl implements ShopDao {
     private static final String EXIST_SHOP_BY_ID_QUERY = "select count(*) as exist from shops where id = ";
     private static final String FIND_SHOP_BY_ID_QUERY = "select * from shops where id = ";
     private static final String FIND_ALL_SHOPS_QUERY = "select * from shops";
-    private static final String FIND_ALL_VIEW_SHOP_QUERY = "select s.id, s.name, s.address, s.status, count(shop_id) as count_of_products \n" +
+    /*private static final String FIND_ALL_VIEW_SHOP_QUERY = "select s.id, s.name, s.address, s.status, count(shop_id) as count_of_products \n" +
             "from shops as s \n" +
             "         left join shop_product as sp on s.id = sp.shop_id \n" +
-            "group by s.id";
-    private static final String FIND_ALL_VIEW_SHOP_BY_PRODUCT_QUERY = "select s.id, s.name, s.address, s.status, (select count(shop_id) from shop_product where shop_id=s.id)  as count_of_products \n" +
+            "group by s.id";*/
+    /*private static final String FIND_ALL_VIEW_SHOP_BY_PRODUCT_QUERY = "select s.id, s.name, s.address, s.status, (select count(shop_id) from shop_product where shop_id=s.id)  as count_of_products \n" +
             "from shops as s \n" +
             "left join shop_product as sp on s.id = sp.shop_id \n" +
-            "  where sp.product_id= ? \n" +
-            "group by s.id";
+            "  where sp.product_id= "? \n" +
+           "group by s.id";*/
 
     private static final String FIND_ALL_SHOPS_BY_PRODUCT_ID_QUERY = "select s.id, s.name, s.address, s.status \n" +
             "from shops as s \n" +
@@ -52,14 +53,21 @@ public class ShopDaoImpl implements ShopDao {
             "  where sp.product_id= ";
 
     private static final String INSERT_REFERENCED_TABLE = "INSERT INTO shop_product (shop_id, product_id) values(?, ?)";
-//    private static final String COUNT_SHOPS_QUERY = "select count(*) as row from shops";
+
+    private static final String FIND_ALL_PRODUCTS_NOT_IN_QUERY = "SELECT p.id, p.name " +
+            "FROM    products as p " +
+            "WHERE   id NOT IN" +
+            "        (" +
+            "        SELECT  p.id" +
+            "        FROM    products p" +
+            "        left join shop_product as sp on p.id = sp.product_id  where sp.shop_id = ";
 
     @Override
     public void create(Shop entity) {
         try (PreparedStatement ps = storeFactory.getConnection().prepareStatement(CREATE_SHOP_QUERY)) {
             ps.setString(1, entity.getName());
             ps.setString(2, entity.getAddress());
-            ps.setString(2, String.valueOf(entity.getStatus()));
+            ps.setString(3, String.valueOf(entity.getStatus()));
             ps.execute();
         } catch (SQLException e) {
             System.out.println("sql error = " + e.getMessage());
@@ -80,8 +88,23 @@ public class ShopDaoImpl implements ShopDao {
 
     @Override
     public long count() { //????????
-        try(Statement statement = storeFactory.getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("select count(*) as count from shops")) {
+        try (Statement statement = storeFactory.getConnection().createStatement();
+             ResultSet rs = statement.executeQuery("select count(*) as count from shops")) {
+            while (rs.next()) {
+                return rs.getLong("count");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    @Override
+    public long countByReferencedId(int id) {
+        try (Statement statement = storeFactory.getConnection().createStatement();
+             ResultSet rs = statement.executeQuery("select count(*) as count from shops as s " +
+                     "join shop_product sp on s.id = sp.shop_id" +
+                     " join products p on p.id = sp.product_id where p.id = " + id)) {
             while (rs.next()) {
                 return rs.getLong("count");
             }
@@ -142,17 +165,17 @@ public class ShopDaoImpl implements ShopDao {
     }
 
     @Override
-    public List<Shop> findAll() {
-        List<Shop> shops = new ArrayList<>();
+    public  List<Product> findAllByNotIn(Integer id) {
+        List<Product> products = new ArrayList<>();
         try (Statement statement = storeFactory.getConnection().createStatement();
-             ResultSet rs = statement.executeQuery(FIND_ALL_SHOPS_QUERY)) {
+             ResultSet rs = statement.executeQuery(FIND_ALL_PRODUCTS_NOT_IN_QUERY + id+" )")) {
             while (rs.next()) {
-                shops.add(convertResultSetToShop(rs));
+                products.add(convertResultSetToProductNotIn(rs));
             }
         } catch (SQLException e) {
             System.out.println("sql error = " + e.getMessage());
         }
-        return shops;
+        return products;
     }
 
     @Override
@@ -162,17 +185,16 @@ public class ShopDaoImpl implements ShopDao {
 
         int limit = (request.getCurrentPage() - 1) * request.getPageSize();
 
-        String sql = "select id, name, address, status, count(shop_id) as count_of_products " +
+        String sql = "select s.id, s.name, s.address, s.status, count(shop_id) as count_of_products " +
                 "from shops as s left join shop_product as sp on s.id = sp.shop_id " +
-                "group by shop.id order by " +
+                "group by s.id order by " +
                 request.getSort() + " " +
                 request.getOrder() + " limit " +
                 limit + "," +
                 request.getPageSize();
 
-
-        try(Statement statement = storeFactory.getConnection().createStatement();
-            ResultSet rs = statement.executeQuery(sql)) {
+        try (Statement statement = storeFactory.getConnection().createStatement();
+             ResultSet rs = statement.executeQuery(sql)) {
             while (rs.next()) {
                 ShopResultSet shopResultSet = convertResultSetToSimpleShop(rs);
                 shops.add(shopResultSet.getShop());
@@ -191,8 +213,8 @@ public class ShopDaoImpl implements ShopDao {
     @Override //??????????????
     public Map<Integer, String> findAllByProductId(Integer productId) {
         Map<Integer, String> map = new HashMap<>();
-        try(Statement statement = storeFactory.getConnection().createStatement();
-            ResultSet rs = statement.executeQuery(FIND_ALL_SHOPS_BY_PRODUCT_ID_QUERY + productId)) {
+        try (Statement statement = storeFactory.getConnection().createStatement();
+             ResultSet rs = statement.executeQuery(FIND_ALL_SHOPS_BY_PRODUCT_ID_QUERY + productId)) {
             while (rs.next()) {
                 Integer id = rs.getInt("id");
                 String name = rs.getString("name");
@@ -206,33 +228,34 @@ public class ShopDaoImpl implements ShopDao {
     }
 
     @Override
-    public  List<ShopViewDto> findAllPrepareView() {
-        List<ShopViewDto> shops = new ArrayList<>();
+    public DataTableResponse<Shop> findAllPrepareViewByProduct(DataTableRequest request, int id) {
+        List<Shop> shops = new ArrayList<>();
+        Map<Object, Object> otherParamMap = new HashMap<>();
+        int limit = (request.getCurrentPage() - 1) * request.getPageSize();
+        String sql = "select s.id, s.name, s.address, s.status, " +
+                "(select count(shop_id) from shop_product where shop_id=s.id)  as count_of_products " +
+                "from shops as s" +
+                " left join shop_product as sp on s.id = sp.shop_id  where sp.product_id=  " + id +
+                " order by " +
+                request.getSort() + " " +
+                request.getOrder() + " limit " +
+                limit + "," +
+                request.getPageSize();
         try (Statement statement = storeFactory.getConnection().createStatement();
-             ResultSet rs = statement.executeQuery(FIND_ALL_VIEW_SHOP_QUERY)) {
+             ResultSet rs = statement.executeQuery(sql)) {
             while (rs.next()) {
-                shops.add(convertResultSetToShopViewDto(rs));
+                ShopResultSet shopResultSet = convertResultSetToSimpleShop(rs);
+                shops.add(shopResultSet.getShop());
+                otherParamMap.put(shopResultSet.getShop().getId(), shopResultSet.getProductCount());
             }
         } catch (SQLException e) {
-            System.out.println("sql error = " + e.getMessage());
+            e.printStackTrace();
         }
-        return shops;
-    }
 
-    @Override
-    public List<ShopViewDto> findAllPrepareViewByProduct(int id) {
-        List<ShopViewDto> students = new ArrayList<>();
-        try(PreparedStatement ps = storeFactory.getConnection().prepareStatement(FIND_ALL_VIEW_SHOP_BY_PRODUCT_QUERY)) {
-            ps.setInt(1, id);
-            try(ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    students.add(convertResultSetToShopViewDto(rs));
-                }
-            }
-        } catch (SQLException e) {
-            System.out.println("sql error = " + e.getMessage());
-        }
-        return students;
+        DataTableResponse<Shop> tableResponse = new DataTableResponse<>();
+        tableResponse.setItems(shops);
+        tableResponse.setOtherParamMap(otherParamMap);
+        return tableResponse;
     }
 
     private Shop convertResultSetToShop(ResultSet rs) throws SQLException {
@@ -260,23 +283,16 @@ public class ShopDaoImpl implements ShopDao {
         shop.setName(name);
         shop.setAddress(address);
         shop.setStatus(ShopStatus.valueOf(status));
-        return new ShopResultSet(shop,countOfProducts);
+        return new ShopResultSet(shop, countOfProducts);
     }
 
-    private ShopViewDto convertResultSetToShopViewDto(ResultSet rs) throws SQLException {
+    private Product convertResultSetToProductNotIn(ResultSet rs) throws SQLException {
         int id = rs.getInt("id");
         String name = rs.getString("name");
-        String address = rs.getString("address");
-        String status = rs.getString("status");
-        int countOfProducts = rs.getInt("count_of_products");
-
-        ShopViewDto shop = new ShopViewDto();
-        shop.setId(id);
-        shop.setName(name);
-        shop.setAddress(address);
-        shop.setStatus(ShopStatus.valueOf(status));
-        shop.setCountOfProducts(countOfProducts);
-        return shop;
+        Product product = new Product();
+        product.setId(id);
+        product.setName(name);
+        return product;
     }
 
     @Getter
@@ -289,6 +305,5 @@ public class ShopDaoImpl implements ShopDao {
             this.shop = shop;
             this.productCount = productCount;
         }
-
     }
 }

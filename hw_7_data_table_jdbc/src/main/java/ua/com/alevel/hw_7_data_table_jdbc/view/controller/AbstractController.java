@@ -18,6 +18,7 @@ import java.util.Map;
 
 import static ua.com.alevel.hw_7_data_table_jdbc.util.WebRequestUtil.DEFAULT_ORDER_PARAM_VALUE;
 
+
 public abstract class AbstractController {
 
     protected void showInfo(Model model, String message) {

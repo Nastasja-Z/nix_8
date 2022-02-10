@@ -10,14 +10,23 @@ import java.util.List;
 public interface BaseDao<ENTITY extends BaseEntity> {
 
     void create(ENTITY entity);
+
     void update(ENTITY entity);
+
     void delete(Integer id);
+
     boolean existById(Integer id);
+
     ENTITY findById(Integer id);
-    List<ENTITY> findAll();
-    <VIEW extends ENTITY> List<VIEW> findAllPrepareView(); //???
+
+    <REF extends BaseEntity>List<REF> findAllByNotIn(Integer id);
+
     DataTableResponse<ENTITY> findAll(DataTableRequest request);
+
     void createReferencedConnection(ReferenceViewDto ref);
+
     long count();
+
+    long countByReferencedId(int id);
 }
 

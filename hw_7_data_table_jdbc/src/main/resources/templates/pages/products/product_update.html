@@ -13,14 +13,14 @@
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    <span th:text="${'New Product'}"></span>
+                    <span th:text="${'Update Product'}"></span>
                 </div>
                 <div class="card-body">
-                    <form method="post" th:object="${product}" th:action="@{/products/new}">
+                    <form method="post" th:object="${product}" th:action="@{'/products/update/' + ${product.getId()}}">
                         <div class="mb-3">
                             <div class="form-group">
                                 <label for="productName">Product name</label>
-                                <input type="text" class="form-control" id="productName" aria-describedby="name" placeholder="Enter product name" th:field="*{name}">
+                                <input type="text" class="form-control" id="productName" aria-describedby="name" placeholder="Enter product name" th:value="${product.name}" th:field="*{name}">
                             </div>
                             <label for="type">Select category</label>
                             <select class="form-control" id="type" th:field="*{category}">
@@ -32,15 +32,15 @@
                         </div>
                         <div class="form-group">
                             <label for="productWeight">Product weight</label>
-                            <input type="number" step="any" class="form-control" id="productWeight" aria-describedby="weight" placeholder="Enter product weight" th:field="*{weight}">
+                            <input type="number" th:value="${product.weight}" step=any  class="form-control" id="productWeight" aria-describedby="weight" placeholder="Enter product weight" th:field="*{weight}">
                         </div>
                         <div class="form-group">
                             <label for="productDescription">Product description</label>
-                            <textarea class="form-control" id="productDescription" aria-describedby="description" placeholder="Enter product description" th:field="*{description}"></textarea>
+                            <textarea class="form-control" th:value="${product.description}" id="productDescription" aria-describedby="description" placeholder="Enter product description" th:field="*{description}"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="productPrice">Product price</label>
-                            <input type="number" step="any" class="form-control" id="productPrice" aria-describedby="price" placeholder="Enter product price" th:field="*{price}">
+                            <input type="number" step=any class="form-control" id="productPrice" aria-describedby="price" placeholder="Enter product price" th:field="*{price}">
                         </div><br>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>

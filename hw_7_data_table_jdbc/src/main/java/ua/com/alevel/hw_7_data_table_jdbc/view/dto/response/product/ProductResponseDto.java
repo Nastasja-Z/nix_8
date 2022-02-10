@@ -3,6 +3,7 @@ package ua.com.alevel.hw_7_data_table_jdbc.view.dto.response.product;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ua.com.alevel.hw_7_data_table_jdbc.persistence.entity.Product;
 import ua.com.alevel.hw_7_data_table_jdbc.view.dto.response.ResponseDto;
 
 @Getter
@@ -16,4 +17,13 @@ public class ProductResponseDto extends ResponseDto {
     private String description;
     private Float price;
     private int countOfShops;
+
+    public ProductResponseDto(Product product) {
+        setId(product.getId());
+        this.name = product.getName();
+        this.category = String.valueOf(product.getCategory());
+        this.weight = product.getWeight();
+        this.description = product.getDescription();
+        this.price = product.getPrice();
+    }
 }

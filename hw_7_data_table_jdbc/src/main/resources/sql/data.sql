@@ -82,6 +82,8 @@ insert into shop_product values (2, 4);
 insert into shop_product values (1, 5);
 insert into shop_product values (3, 6);
 insert into shop_product values (1, 8);
+insert into shop_product values (2, 8);
+insert into shop_product values (3, 8);
 insert into shop_product values (3, 9);
 insert into shop_product values (3, 10);
 insert into shop_product values (4, 11);

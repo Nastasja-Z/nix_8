@@ -1,13 +1,15 @@
 package ua.com.alevel.hw_7_data_table_jdbc.view.dto.response;
 
+import ua.com.alevel.hw_7_data_table_jdbc.datatable.DataTableResponse;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class PageData<REQ extends ResponseDto> {
 
-    private int currentPage;
     private int pageSize;
-    private int totalPageSize;
+    private int currentPage = 0;
+    private int totalPageSize = 0;
     private long itemsSize;
     private List<REQ> items;
     private final int[] pageSizeItems;
@@ -21,10 +23,8 @@ public class PageData<REQ extends ResponseDto> {
     private int currentShowToEntries;
 
     public PageData() {
-        this.currentPage = 0;
         this.pageSizeItems = new int[]{5, 10, 25, 50, 100};
-        this.pageSize = this.pageSizeItems[0];
-        this.totalPageSize = 0;
+        this.pageSize=this.pageSizeItems[0];
         this.itemsSize = 0;
         this.items = new ArrayList<>();
         this.showFirst = false;
@@ -35,14 +35,30 @@ public class PageData<REQ extends ResponseDto> {
 
     public void initPaginationState() {
         if (pageSize < itemsSize) {
-            this.totalPageSize = (int) itemsSize / pageSize;
+            if (itemsSize % pageSize == 0) {
+                this.totalPageSize = (int) (itemsSize / pageSize);
+            } else {
+                this.totalPageSize = (int) itemsSize / pageSize + 1;
+            }
             this.showFirst = currentPage != 1;
             this.showPrevious = currentPage - 1 != 0;
             this.showLast = currentPage - 1 != totalPageSize;
             this.showNext = currentPage - 1 != totalPageSize;
+            if (itemsSize != 0) {
+                this.currentShowFromEntries = (currentPage - 1) * pageSize + 1;
+                if ((currentPage * pageSize) > itemsSize) {
+                    this.currentShowToEntries = (int) itemsSize;
+                } else {
+                    this.currentShowToEntries = currentShowFromEntries * pageSize;
+                }
+            } else {
+                this.currentShowFromEntries = 0;
+                this.currentShowToEntries = 0;
+            }
+        } else {
+            this.currentShowFromEntries = 1;
+            this.currentShowToEntries = (int) itemsSize;
         }
-        currentShowFromEntries = ((currentPage - 1) * pageSize) + 1;
-        currentShowToEntries = ((currentPage - 1) * pageSize) + items.size();
     }
 
     public int getCurrentPage() {

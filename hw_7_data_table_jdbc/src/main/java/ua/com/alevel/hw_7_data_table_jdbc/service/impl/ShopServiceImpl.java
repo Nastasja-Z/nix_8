@@ -5,11 +5,13 @@ import ua.com.alevel.hw_7_data_table_jdbc.datatable.DataTableRequest;
 import ua.com.alevel.hw_7_data_table_jdbc.datatable.DataTableResponse;
 import ua.com.alevel.hw_7_data_table_jdbc.exception.EntityExistException;
 import ua.com.alevel.hw_7_data_table_jdbc.persistence.dao.ShopDao;
+import ua.com.alevel.hw_7_data_table_jdbc.persistence.entity.Product;
 import ua.com.alevel.hw_7_data_table_jdbc.persistence.entity.Shop;
 import ua.com.alevel.hw_7_data_table_jdbc.service.ShopService;
 import ua.com.alevel.hw_7_data_table_jdbc.util.WebResponseUtil;
 import ua.com.alevel.hw_7_data_table_jdbc.view.dto.ReferenceViewDto;
 import ua.com.alevel.hw_7_data_table_jdbc.view.dto.ShopViewDto;
+import ua.com.alevel.hw_7_data_table_jdbc.view.dto.response.shop.ShopResponseDto;
 
 import java.util.List;
 import java.util.Map;
@@ -62,21 +64,25 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
+    public List<Product> findAllByNotIn(Integer id) {
+        return shopDao.findAllByNotIn(id);
+    }
+
+    @Override
+    public DataTableResponse<Shop> findAllPrepareViewByProduct(DataTableRequest request, int id) {
+        DataTableResponse<Shop> response = shopDao.findAllPrepareViewByProduct(request, id);
+        long count = shopDao.countByReferencedId(id);
+        WebResponseUtil.initDataTableResponse(request, response, count);
+        return response;
+    }
+
+    @Override
     public Map<Integer, String> findAllByProductId(Integer productId) {
         return shopDao.findAllByProductId(productId);
     }
 
     @Override
-    public List<ShopViewDto> findAllPrepareView() {
-        return shopDao.findAllPrepareView();
-    }
-
-    @Override
-    public List<ShopViewDto> findAllPrepareViewByProduct(Integer productId) {
-        return shopDao.findAllPrepareViewByProduct(productId);
-    }
-
-    private void checkByExist(Integer id) {
+    public void checkByExist(Integer id) {
         if (!shopDao.existById(id)) {
             throw new EntityExistException("entity not found");
         }

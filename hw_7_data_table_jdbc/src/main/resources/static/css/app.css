@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css?family=Numans');
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa&display=swap');
 
 body {
-    background: url('https://miro.medium.com/max/5642/1*igvVvVLNlguJW-009OEvuw.jpeg') no-repeat center center fixed;
+    background: url('https://naurok-test2.nyc3.digitaloceanspaces.com/133777/images/620187_1635342341.jpg') no-repeat center center fixed;
     background-size: cover;
     height: 100%;
-    font-family: 'Numans', sans-serif;
+    font-family: 'Comfortaa', cursive;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
