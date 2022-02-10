@@ -98,7 +98,6 @@ public class ShopFacadeImpl implements ShopFacade {
     public PageData<ShopResponseDto> findAllPrepareViewByProduct(WebRequest request, int id) {
         DataTableRequest dataTableRequest = WebRequestUtil.initDataTableRequest(request);
         DataTableResponse<Shop> tableResponse = shopService.findAllPrepareViewByProduct(dataTableRequest, id);
-
         List<ShopResponseDto> shops = tableResponse.
                 getItems().
                 stream().
@@ -108,11 +107,8 @@ public class ShopFacadeImpl implements ShopFacade {
                         get(shopResponseDto.
                                 getId()))).
                 collect(Collectors.toList());
-
         PageData<ShopResponseDto> pageData = (PageData<ShopResponseDto>) WebResponseUtil.initPageData(tableResponse);
         pageData.setItems(shops);
-
-
         return pageData;
     }
 }

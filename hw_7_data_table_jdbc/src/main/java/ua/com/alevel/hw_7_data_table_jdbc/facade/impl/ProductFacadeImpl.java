@@ -14,6 +14,7 @@ import ua.com.alevel.hw_7_data_table_jdbc.view.dto.ReferenceViewDto;
 import ua.com.alevel.hw_7_data_table_jdbc.view.dto.request.product.ProductRequestDto;
 import ua.com.alevel.hw_7_data_table_jdbc.view.dto.response.PageData;
 import ua.com.alevel.hw_7_data_table_jdbc.view.dto.response.product.ProductResponseDto;
+import ua.com.alevel.hw_7_data_table_jdbc.view.dto.response.shop.ShopResponseDto;
 
 import java.util.List;
 import java.util.Map;
@@ -100,8 +101,7 @@ public class ProductFacadeImpl implements ProductFacade {
     @Override
     public PageData<ProductResponseDto> findAllPrepareViewByShop(WebRequest request, int id) {
         DataTableRequest dataTableRequest = WebRequestUtil.initDataTableRequest(request);
-        DataTableResponse<Product> tableResponse = productService.findAllPrepareViewByShop(dataTableRequest,id);
-
+        DataTableResponse<Product> tableResponse = productService.findAllPrepareViewByShop(dataTableRequest, id);
         List<ProductResponseDto> products = tableResponse.
                 getItems().
                 stream().
@@ -111,10 +111,8 @@ public class ProductFacadeImpl implements ProductFacade {
                         get(productResponseDto.
                                 getId()))).
                 collect(Collectors.toList());
-
         PageData<ProductResponseDto> pageData = (PageData<ProductResponseDto>) WebResponseUtil.initPageData(tableResponse);
         pageData.setItems(products);
-
         return pageData;
     }
 

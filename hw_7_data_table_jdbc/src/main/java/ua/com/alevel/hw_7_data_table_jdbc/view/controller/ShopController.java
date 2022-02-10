@@ -1,6 +1,5 @@
 package ua.com.alevel.hw_7_data_table_jdbc.view.controller;
 
-import jdk.jshell.Snippet;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -10,11 +9,9 @@ import org.springframework.web.servlet.ModelAndView;
 import ua.com.alevel.hw_7_data_table_jdbc.facade.ProductFacade;
 import ua.com.alevel.hw_7_data_table_jdbc.facade.ShopFacade;
 import ua.com.alevel.hw_7_data_table_jdbc.persistence.entity.ShopStatus;
-import ua.com.alevel.hw_7_data_table_jdbc.service.ProductService;
 import ua.com.alevel.hw_7_data_table_jdbc.view.dto.ReferenceViewDto;
 import ua.com.alevel.hw_7_data_table_jdbc.view.dto.request.shop.ShopRequestDto;
 import ua.com.alevel.hw_7_data_table_jdbc.view.dto.response.PageData;
-import ua.com.alevel.hw_7_data_table_jdbc.view.dto.response.product.ProductResponseDto;
 import ua.com.alevel.hw_7_data_table_jdbc.view.dto.response.shop.ShopResponseDto;
 
 @Controller

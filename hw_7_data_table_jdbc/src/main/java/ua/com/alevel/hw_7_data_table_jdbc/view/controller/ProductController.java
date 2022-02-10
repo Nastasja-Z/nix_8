@@ -1,5 +1,6 @@
 package ua.com.alevel.hw_7_data_table_jdbc.view.controller;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -87,13 +88,12 @@ public class ProductController extends AbstractController {
 
     @GetMapping("/{shopId}")
     public String findAllByShop(WebRequest request, Model model, @PathVariable int shopId) {
-        PageData<ProductResponseDto> response = productFacade.findAllPrepareViewByShop(request,shopId);
+        PageData<ProductResponseDto> response = productFacade.findAllPrepareViewByShop(request, shopId);
         initDataTable(response, columnNames, model);
         model.addAttribute("createUrl", "/products/all");
         model.addAttribute("createNew", "/products/new");
-        //model.addAttribute("shop", shopFacade.findById(shopId));
-        String shop =shopFacade.findById(shopId).getName();
-        model.addAttribute("cardHeader", "All Products by "+ shop);
+        String shop = shopFacade.findById(shopId).getName();
+        model.addAttribute("cardHeader", "All Products by " + shop);
         return "pages/products/products_all";
     }
 
@@ -105,13 +105,13 @@ public class ProductController extends AbstractController {
     }
 
     @PostMapping("/update/{id}")
-    public String redirectToUpdatedProduct(@ModelAttribute("product") ProductRequestDto productRequestDto, @PathVariable Integer id ){
-        productFacade.update(productRequestDto,id);
+    public String redirectToUpdatedProduct(@ModelAttribute("product") ProductRequestDto productRequestDto, @PathVariable Integer id) {
+        productFacade.update(productRequestDto, id);
         return "redirect:/products/details/{id}";
     }
 
     @GetMapping("/update/{id}")
-    public String updateProduct(Model model, @PathVariable Integer id){
+    public String updateProduct(Model model, @PathVariable Integer id) {
         model.addAttribute("product", productFacade.findById(id));
         model.addAttribute("categories", Category.values());
         //for delete

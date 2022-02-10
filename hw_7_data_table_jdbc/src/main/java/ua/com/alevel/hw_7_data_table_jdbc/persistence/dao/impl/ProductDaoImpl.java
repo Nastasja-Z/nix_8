@@ -183,9 +183,7 @@ public class ProductDaoImpl implements ProductDao {
     public DataTableResponse<Product> findAll(DataTableRequest request) {
         List<Product> products = new ArrayList<>();
         Map<Object, Object> otherParamMap = new HashMap<>();
-
         int limit = (request.getCurrentPage() - 1) * request.getPageSize();
-
         String sql = "select p.id, p.name, p.category, p.weight, p.price, count(product_id) as count_of_shops " +
                 "from products as p left join shop_product as sp on p.id = sp.product_id " +
                 "group by p.id order by " +
@@ -218,7 +216,6 @@ public class ProductDaoImpl implements ProductDao {
         float weight = rs.getFloat("weight");
         float price = rs.getFloat("price");
         int countOfShops = rs.getInt("count_of_shops");
-        System.out.println("countOfShops = " + countOfShops);
 
         Product product = new Product();
         product.setId(id);
@@ -246,7 +243,7 @@ public class ProductDaoImpl implements ProductDao {
         try (Statement statement = storeFactory.getConnection().createStatement();
              ResultSet rs = statement.executeQuery(sql)) {
             while (rs.next()) {
-                ProductDaoImpl.ProductResultSet productResultSet = convertResultSetToSimpleProduct(rs);
+                ProductResultSet productResultSet = convertResultSetToSimpleProductPrepareView(rs);
                 products.add(productResultSet.getProduct());
                 otherParamMap.put(productResultSet.getProduct().getId(), productResultSet.getShopCount());
             }
@@ -259,6 +256,25 @@ public class ProductDaoImpl implements ProductDao {
         return tableResponse;
     }
 
+    private ProductResultSet convertResultSetToSimpleProductPrepareView(ResultSet rs) throws SQLException {
+        int id = rs.getInt("id");
+        String name = rs.getString("name");
+        String category = rs.getString("category");
+        float weight = rs.getFloat("weight");
+        String description = rs.getString("description");
+        float price = rs.getFloat("price");
+        int countOfShops = rs.getInt("count_of_shops");
+
+        Product product = new Product();
+        product.setId(id);
+        product.setName(name);
+        product.setCategory(Category.valueOf(category));
+        product.setWeight(weight);
+        product.setDescription(description);
+        product.setPrice(price);
+        return new ProductDaoImpl.ProductResultSet(product, countOfShops);
+    }
+
     @Override
     public Map<Integer, String> findAllByShopId(Integer shopId) {
         Map<Integer, String> map = new HashMap<>();
@@ -267,7 +283,6 @@ public class ProductDaoImpl implements ProductDao {
             while (rs.next()) {
                 Integer id = rs.getInt("id");
                 String name = rs.getString("name");
-                //String lastName = rs.getString("last_name");
                 map.put(id, name);
             }
         } catch (SQLException e) {

@@ -11,7 +11,6 @@ import ua.com.alevel.hw_7_data_table_jdbc.persistence.entity.Shop;
 import ua.com.alevel.hw_7_data_table_jdbc.persistence.entity.ShopStatus;
 import ua.com.alevel.hw_7_data_table_jdbc.store.ConnectionStoreFactory;
 import ua.com.alevel.hw_7_data_table_jdbc.view.dto.ReferenceViewDto;
-import ua.com.alevel.hw_7_data_table_jdbc.view.dto.ShopViewDto;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -210,7 +209,7 @@ public class ShopDaoImpl implements ShopDao {
         return tableResponse;
     }
 
-    @Override //??????????????
+    @Override
     public Map<Integer, String> findAllByProductId(Integer productId) {
         Map<Integer, String> map = new HashMap<>();
         try (Statement statement = storeFactory.getConnection().createStatement();
@@ -218,7 +217,6 @@ public class ShopDaoImpl implements ShopDao {
             while (rs.next()) {
                 Integer id = rs.getInt("id");
                 String name = rs.getString("name");
-                //String lastName = rs.getString("last_name");
                 map.put(id, name);
             }
         } catch (SQLException e) {
@@ -251,7 +249,6 @@ public class ShopDaoImpl implements ShopDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         DataTableResponse<Shop> tableResponse = new DataTableResponse<>();
         tableResponse.setItems(shops);
         tableResponse.setOtherParamMap(otherParamMap);
@@ -278,7 +275,7 @@ public class ShopDaoImpl implements ShopDao {
         String status = rs.getString("status");
         int countOfProducts = rs.getInt("count_of_products");
 
-        Shop shop = new ShopViewDto();
+        Shop shop = new Shop();
         shop.setId(id);
         shop.setName(name);
         shop.setAddress(address);
