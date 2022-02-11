@@ -1,10 +1,10 @@
 insert into shops values (1, 'Rewe', 'Karl Lag Street, 45', 'SUPERMARKET');
 insert into shops values (2, 'Lidl', 'Zentralle Strasse, 1 A', 'SUPERMARKET');
 insert into shops values (3, 'Edeka', 'Metzger Strasse, 13', 'SUPERMARKET');
-insert into shops values (4, 'У Тамары', 'Сами без понятия', 'KIOSK');
-insert into shops values (5, 'Посад', 'метро Холодная Гора', 'SHOP');
-insert into shops values (6, 'На углу', 'С торца дома дочери маминой подруги', 'KIOSK');
-insert into shops values (7, 'Кулиничи', 'Возле любого метро', 'SHOP');
+insert into shops values (4, 'By Tamara', 'No information', 'KIOSK');
+insert into shops values (5, 'Posad', 'metro Holodna Gora', 'SHOP');
+insert into shops values (6, 'Gendelik', 'Look for it by your own feelings', 'KIOSK');
+insert into shops values (7, 'Kulinichi', 'Next to each urban station', 'SHOP');
 
 insert into products values (1, 'Juice Jaffa', 'LIQUID', 50.0, 'The best juice of the world.
 Brand Jaffa - a series of 100% juices and nectars from selected fruits.
@@ -48,12 +48,13 @@ We apologize for any mistakes - if you ask about the ad message please contact u
 insert into products values (6, 'Oreo', 'SWEET', 23.7, 'Enjoy the original OREO in an iconic, cookie-shaped premium tin: Chocolate-flavoured crunchy sandwich cookie with delicious vanilla cream filling.
 Iconic, premium tin contains 9 individually wrapped sachets in a collectable tin, appealing to any Oreo lover. A perfect gift!', 17.2);
 insert into products values (7, 'Barni', 'SWEET', 20.9, 'Enjoy the original OREO in an iconic, cookie-shaped premium tin: Chocolate-flavoured crunchy sandwich cookie with delicious vanilla cream filling. Iconic, premium tin contains 9 individually wrapped sachets in a collectable tin, appealing to any Oreo lover. A perfect gift!', 10.3);
-insert into products values (8, 'Morshinska', 'LIQUID', 30.1, 'Природна мінеральна вода «Моршинська» походить з Прикарпаття, з моршинської долини, що розташована в курортному регіоні поблизу східного схилу Карпатського хребта і оточена з усіх боків лісами.
-У Моршинській долині ніколи не було великих підприємств, АЗС, поселень, тому природна мінеральна вода «Моршинська» захищена від наслідків виробничої діяльності людей та техногенного впливу.
-Моршинська вода є джерельною водою — однією із найцінніших серед природних вод. Вона самотужки прокладає собі шлях на поверхню землі і б’є природними джерелами на території курортної зони у букових лісах.
-На поверхні вода потрапляє у спеціальні водозбірні споруди — каптажі, які захищають джерела і воду від зовнішніх впливів. Територія безпосередньо біля джерел охороняється, і є закритою зоною санітарного контролю з обмеженим доступом сторонніх людей.', 33.4);
-insert into products values (9, 'Lays', 'SNACK', 34.5, 'Чипсы – закуска, которая представляет собой тонкие ломтики картофеля, обжаренные в масле. Lays – это бренд для разнообразных картофельных чипсов, который был основан в 1938 году. Чипсы Lays производят как натуральные, так и с различными вкусовыми добавками: сыр, бекон, зелёный лук, лук и сметана, краб, сметана и зелень, белые грибы со сметаной, красная икра, малосольные огурчики с укропом, шашлык (калоризатор). Чипсы Lays сыр – это золотистые чипсы из натурального картофеля, отличаются отменным вкусом с нотками сыра.
-Чипсы Lays сыр выпускают в индивидуальных упаковках весом: 28 гр. / 85 гр. / 160 гр.', 33.9);
+insert into products values (8, 'Morshinska', 'LIQUID', 30.1, 'Natural Mineral Water "Morshynska" come from the Pre-Carpathian region, from Morshynska valley, which is located in the resort area near the middle slope of the Carpathian Mountains and is shaded on both sides of the woods.
+Morshynska valley has never been a big enterprises, gas stations, settlements, therefore natural mineral water "Morshynska" protected from the effects of industrial activity of people and man-made influence.
+Morshynska water is jerylna water - one of the most valuable of natural waters. It runs its own path to the surface of the land and natural sources on the territory of the resort area in beech forests.
+On the surface water is released into the special water-intake structures - captages, which protect the sources and water from external influences. The area directly next to the sources is guarded, and is a closed zone of sanitary control with limited access to outsiders.', 33.4);
+
+insert into products values (9, 'Lays', 'SNACK', 34.5, 'Chips are a snack that are thin slices of potato fried in oil. Lays is the brand for a variety of potato chips, which was founded in 1938. Lays chips are made both natural and with different flavors: cheese, bacon, green onions, onions and sour cream, crab, sour cream and herbs, porcini mushrooms with sour cream, red caviar, salted pickles with dill, kebab (calorizer). Lays Cheese Chips are golden potato chips made of natural potato, with an excellent taste and hint of cheese.
+Lays Cheese chips come in individual packages of 28g / 85g / 160g.', 33.9);
 insert into products values (10, 'Pepper', 'VEGETABLE', 30.4, 'Pepper or black pepper is the dried unripe fruit grown in the plant called piper nigrum.
 It is pungent smell, peppery/hot taste and health friendly properties make pepper a favorite spice all over the world and it is commonly used in all cuisines.
 Peppercorn or pepper has wide applications in the culinary industry where three different categories of pepper are used, such as black pepper, white pepper and green pepper.
