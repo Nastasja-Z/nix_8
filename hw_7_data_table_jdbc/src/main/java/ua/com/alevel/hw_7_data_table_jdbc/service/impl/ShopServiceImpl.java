@@ -1,6 +1,7 @@
 package ua.com.alevel.hw_7_data_table_jdbc.service.impl;
 
 import org.springframework.stereotype.Service;
+
 import ua.com.alevel.hw_7_data_table_jdbc.datatable.DataTableRequest;
 import ua.com.alevel.hw_7_data_table_jdbc.datatable.DataTableResponse;
 import ua.com.alevel.hw_7_data_table_jdbc.exception.EntityExistException;
@@ -10,8 +11,6 @@ import ua.com.alevel.hw_7_data_table_jdbc.persistence.entity.Shop;
 import ua.com.alevel.hw_7_data_table_jdbc.service.ShopService;
 import ua.com.alevel.hw_7_data_table_jdbc.util.WebResponseUtil;
 import ua.com.alevel.hw_7_data_table_jdbc.view.dto.ReferenceViewDto;
-import ua.com.alevel.hw_7_data_table_jdbc.view.dto.ShopViewDto;
-import ua.com.alevel.hw_7_data_table_jdbc.view.dto.response.shop.ShopResponseDto;
 
 import java.util.List;
 import java.util.Map;

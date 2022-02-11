@@ -1,7 +1,9 @@
 package ua.com.alevel.hw_7_data_table_jdbc.persistence.dao.impl;
 
 import lombok.Getter;
+
 import org.springframework.stereotype.Service;
+
 import ua.com.alevel.hw_7_data_table_jdbc.datatable.DataTableRequest;
 import ua.com.alevel.hw_7_data_table_jdbc.datatable.DataTableResponse;
 import ua.com.alevel.hw_7_data_table_jdbc.persistence.dao.ProductDao;
@@ -10,7 +12,6 @@ import ua.com.alevel.hw_7_data_table_jdbc.persistence.entity.Product;
 import ua.com.alevel.hw_7_data_table_jdbc.persistence.entity.Shop;
 import ua.com.alevel.hw_7_data_table_jdbc.store.ConnectionStoreFactory;
 import ua.com.alevel.hw_7_data_table_jdbc.view.dto.ReferenceViewDto;
-import ua.com.alevel.hw_7_data_table_jdbc.view.dto.response.product.ProductResponseDto;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -36,29 +37,19 @@ public class ProductDaoImpl implements ProductDao {
     private static final String EXIST_PRODUCT_BY_ID_QUERY = "select count(*) as exist from products where id = ";
     private static final String FIND_PRODUCT_BY_ID_QUERY = "select * from products where id = ";
     private static final String FIND_ALL_PRODUCTS_QUERY = "select * from products";
-   /* private static final String FIND_ALL_VIEW_PRODUCT_QUERY = "select p.id, p.name, p.category, p.weight, p.description, p.price, count(product_id) as count_of_shops \n" +
-            "from products as p \n" +
-            "         left join shop_product as sp on p.id = sp.product_id \n" +
-            "group by p.id";
-    private static final String FIND_ALL_VIEW_PRODUCT_BY_SHOP_QUERY = "select p.id, p.name, p.category, p.weight, p.description, p.price, (select count(product_id) from shop_product where product_id=p.id)  as count_of_shops \n" +
-            "from products as p \n" +
-            "left join shop_product as sp on p.id = sp.product_id \n" +
-            "  where sp.shop_id= ? \n" +
-            "group by p.id";*/
     private static final String FIND_ALL_PRODUCTS_BY_SHOP_ID_QUERY = "select p.id, p.name, p.category, p.weight, p.description, p.price \n" +
             "from products as p \n" +
             "left join shop_product as sp on p.id = sp.product_id \n" +
             "  where sp.shop_id= ";
-
     private static final String INSERT_REFERENCED_TABLE = "INSERT INTO shop_product (shop_id, product_id) values(?, ?)";
-
-    private static final String FIND_ALL_PRODUCTS_NOT_IN_QUERY ="SELECT s.id, s.name " +
+    private static final String FIND_ALL_PRODUCTS_NOT_IN_QUERY = "SELECT s.id, s.name " +
             "FROM    shops as s " +
             "WHERE   id NOT IN" +
             "        (" +
             "        SELECT  s.id" +
             "        FROM    shops s" +
             "        left join shop_product as sp on s.id = sp.shop_id  where sp.product_id = ";
+
     @Override
     public void create(Product entity) {
         try (PreparedStatement ps = storeFactory.getConnection().prepareStatement(CREATE_PRODUCT_QUERY)) {
@@ -67,7 +58,6 @@ public class ProductDaoImpl implements ProductDao {
             ps.setFloat(3, entity.getWeight());
             ps.setString(4, entity.getDescription());
             ps.setFloat(5, entity.getPrice());
-
             ps.execute();
         } catch (SQLException e) {
             System.out.println("sql error = " + e.getMessage());
@@ -169,7 +159,7 @@ public class ProductDaoImpl implements ProductDao {
     public List<Shop> findAllByNotIn(Integer id) {
         List<Shop> shops = new ArrayList<>();
         try (Statement statement = storeFactory.getConnection().createStatement();
-             ResultSet rs = statement.executeQuery(FIND_ALL_PRODUCTS_NOT_IN_QUERY +id+ " )")) {
+             ResultSet rs = statement.executeQuery(FIND_ALL_PRODUCTS_NOT_IN_QUERY + id + " )")) {
             while (rs.next()) {
                 shops.add(convertResultSetToProductNotIn(rs));
             }
@@ -216,7 +206,6 @@ public class ProductDaoImpl implements ProductDao {
         float weight = rs.getFloat("weight");
         float price = rs.getFloat("price");
         int countOfShops = rs.getInt("count_of_shops");
-
         Product product = new Product();
         product.setId(id);
         product.setName(name);
@@ -264,7 +253,6 @@ public class ProductDaoImpl implements ProductDao {
         String description = rs.getString("description");
         float price = rs.getFloat("price");
         int countOfShops = rs.getInt("count_of_shops");
-
         Product product = new Product();
         product.setId(id);
         product.setName(name);
@@ -294,11 +282,9 @@ public class ProductDaoImpl implements ProductDao {
     private Shop convertResultSetToProductNotIn(ResultSet rs) throws SQLException {
         int id = rs.getInt("id");
         String name = rs.getString("name");
-
         Shop shop = new Shop();
         shop.setId(id);
         shop.setName(name);
-
         return shop;
     }
 
@@ -316,25 +302,6 @@ public class ProductDaoImpl implements ProductDao {
         product.setWeight(weight);
         product.setDescription(description);
         product.setPrice(price);
-        return product;
-    }
-
-    private ProductResponseDto convertResultSetToShopViewDto(ResultSet rs) throws SQLException {
-        int id = rs.getInt("id");
-        String name = rs.getString("name");
-        String category = rs.getString("category");
-        Float weight = rs.getFloat("weight");
-        String description = rs.getString("description");
-        Float price = rs.getFloat("price");
-        int countOfShops = rs.getInt("count_of_shops");
-        ProductResponseDto product = new ProductResponseDto();
-        product.setId(id);
-        product.setName(name);
-        product.setCategory(category);
-        product.setWeight(weight);
-        product.setDescription(description);
-        product.setPrice(price);
-        product.setCountOfShops(countOfShops);
         return product;
     }
 

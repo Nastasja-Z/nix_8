@@ -6,6 +6,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
+
 import ua.com.alevel.hw_7_data_table_jdbc.facade.ProductFacade;
 import ua.com.alevel.hw_7_data_table_jdbc.facade.ShopFacade;
 import ua.com.alevel.hw_7_data_table_jdbc.persistence.entity.ShopStatus;
@@ -109,8 +110,6 @@ public class ShopController extends AbstractController {
     public String updateShop(Model model, @PathVariable Integer id){
         model.addAttribute("shop", shopFacade.findById(id));
         model.addAttribute("statuses", ShopStatus.values());
-        //for delete
-        model.addAttribute("products", productFacade.findAllByShopId(id));
         return "pages/shops/shop_update";
     }
 

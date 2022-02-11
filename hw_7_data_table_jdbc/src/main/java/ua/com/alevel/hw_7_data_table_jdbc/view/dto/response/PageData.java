@@ -1,7 +1,5 @@
 package ua.com.alevel.hw_7_data_table_jdbc.view.dto.response;
 
-import ua.com.alevel.hw_7_data_table_jdbc.datatable.DataTableResponse;
-
 import java.util.ArrayList;
 import java.util.List;
 

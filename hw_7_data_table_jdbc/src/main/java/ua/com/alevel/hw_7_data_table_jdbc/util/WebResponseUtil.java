@@ -8,7 +8,8 @@ import ua.com.alevel.hw_7_data_table_jdbc.view.dto.response.ResponseDto;
 
 public final class WebResponseUtil {
 
-    private WebResponseUtil() { }
+    private WebResponseUtil() {
+    }
 
     public static PageData<? extends ResponseDto> initPageData(
             DataTableResponse<? extends BaseEntity> tableResponse) {

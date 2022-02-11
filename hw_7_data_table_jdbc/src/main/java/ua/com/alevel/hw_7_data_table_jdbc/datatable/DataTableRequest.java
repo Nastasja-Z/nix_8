@@ -1,7 +1,5 @@
 package ua.com.alevel.hw_7_data_table_jdbc.datatable;
 
-
-
 import lombok.Getter;
 import lombok.Setter;
 

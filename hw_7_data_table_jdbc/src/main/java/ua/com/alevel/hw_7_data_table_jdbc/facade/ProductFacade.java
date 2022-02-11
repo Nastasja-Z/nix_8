@@ -17,5 +17,6 @@ import java.util.Map;
 public interface ProductFacade extends BaseFacade<ProductRequestDto, ProductResponseDto> {
 
     Map<Integer, String> findAllByShopId(Integer shopId);
+
     PageData<ProductResponseDto> findAllPrepareViewByShop(WebRequest request, int id);
 }

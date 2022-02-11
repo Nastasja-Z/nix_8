@@ -2,6 +2,7 @@ package ua.com.alevel.hw_7_data_table_jdbc.facade.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.WebRequest;
+
 import ua.com.alevel.hw_7_data_table_jdbc.datatable.DataTableRequest;
 import ua.com.alevel.hw_7_data_table_jdbc.datatable.DataTableResponse;
 import ua.com.alevel.hw_7_data_table_jdbc.facade.ProductFacade;
@@ -14,7 +15,6 @@ import ua.com.alevel.hw_7_data_table_jdbc.view.dto.ReferenceViewDto;
 import ua.com.alevel.hw_7_data_table_jdbc.view.dto.request.product.ProductRequestDto;
 import ua.com.alevel.hw_7_data_table_jdbc.view.dto.response.PageData;
 import ua.com.alevel.hw_7_data_table_jdbc.view.dto.response.product.ProductResponseDto;
-import ua.com.alevel.hw_7_data_table_jdbc.view.dto.response.shop.ShopResponseDto;
 
 import java.util.List;
 import java.util.Map;
@@ -66,7 +66,6 @@ public class ProductFacadeImpl implements ProductFacade {
     public PageData<ProductResponseDto> findAll(WebRequest request) {
         DataTableRequest dataTableRequest = WebRequestUtil.initDataTableRequest(request);
         DataTableResponse<Product> tableResponse = productService.findAll(dataTableRequest);
-
         List<ProductResponseDto> products = tableResponse.
                 getItems().
                 stream().
@@ -76,10 +75,8 @@ public class ProductFacadeImpl implements ProductFacade {
                         get(productResponseDto.
                                 getId()))).
                 collect(Collectors.toList());
-
         PageData<ProductResponseDto> pageData = (PageData<ProductResponseDto>) WebResponseUtil.initPageData(tableResponse);
         pageData.setItems(products);
-
         return pageData;
     }
 

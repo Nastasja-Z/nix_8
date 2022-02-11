@@ -61,16 +61,11 @@
                         </tr>
                         <tr>
                             <th>Add to new shop</th>
-                            <td><!--<a th:href="@{'/shops/product/' + ${shop.getId()}}" type="button"
-                                   class="btn btn-warning">add product</a>-->
-
+                            <td>
                                 <button type="button" class="btn btn-warning"
                                         data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                    <!--th:href="@{'/shops/product/' + ${shop.getId()}}"-->
                                     add shop
                                 </button>
-
-                                <!-- Modal -->
                                 <div class="modal fade" id="exampleModal" tabindex="-1"
                                      aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
@@ -102,7 +97,6 @@
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                                     Close
                                                 </button>
-                                                <!--                                                <button type="button" class="btn btn-primary">Save changes</button>-->
                                             </div>
                                         </div>
                                     </div>

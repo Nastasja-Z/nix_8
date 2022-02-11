@@ -14,10 +14,16 @@ import java.util.List;
 public interface BaseFacade<REQ extends RequestDto, RES extends ResponseDto> {
 
     void create(REQ req);
+
     void update(REQ req, Integer id);
+
     void delete(Integer id);
+
     RES findById(Integer id);
+
     PageData<RES> findAll(WebRequest request);
+
     void createReferenceConnection(ReferenceViewDto entity);
-    <REF extends BaseEntity>List<REF> findAllByNotIn(Integer id);
+
+    <REF extends BaseEntity> List<REF> findAllByNotIn(Integer id);
 }

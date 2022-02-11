@@ -62,7 +62,6 @@ public class ShopFacadeImpl implements ShopFacade {
     public PageData<ShopResponseDto> findAll(WebRequest request) {
         DataTableRequest dataTableRequest = WebRequestUtil.initDataTableRequest(request);
         DataTableResponse<Shop> tableResponse = shopService.findAll(dataTableRequest);
-
         List<ShopResponseDto> shops = tableResponse.
                 getItems().
                 stream().
@@ -72,10 +71,8 @@ public class ShopFacadeImpl implements ShopFacade {
                         get(shopResponseDto.
                                 getId()))).
                 collect(Collectors.toList());
-
         PageData<ShopResponseDto> pageData = (PageData<ShopResponseDto>) WebResponseUtil.initPageData(tableResponse);
         pageData.setItems(shops);
-
         return pageData;
     }
 

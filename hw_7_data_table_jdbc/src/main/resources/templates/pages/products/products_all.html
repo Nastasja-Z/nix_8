@@ -18,7 +18,8 @@
         <td th:text="${product.getWeight()}"></td>
         <td th:text="${product.getPrice()}"></td>
         <td>
-            <a th:href="@{'/shops/' + ${product.getId()}}" th:text="${product.getCountOfShops()}" type="button" class="btn btn-link">count</a>
+            <a th:href="@{'/shops/' + ${product.getId()}}" th:text="${product.getCountOfShops()}" type="button"
+               class="btn btn-link">count</a>
         </td>
         <td>
             <a th:href="@{'/products/details/' + ${product.getId()}}" type="button" class="btn btn-primary">details</a>
@@ -29,78 +30,6 @@
     </tr>
 
 </div>
-
 </body>
 </html>
 
-<!--
-<!DOCTYPE html>
-<html lang="en"
-      xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org"
-      layout:decorate="~{layout}">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<div layout:fragment="content">
-    <div class="container">
-        <div class="card mt-4">
-            <div class="card-header">
-                <h1>Products</h1><br>
-                <a class="btn btn-primary" href="#" role="button" th:href="@{/products/new}">Add new product</a>
-            </div>
-            <div class="card-body">
-                <table class="table table-striped table-hover">
-                    <thead>
-                    <tr>
-                        <th>id</th>
-                        <th>name</th>
-                        <th>category</th>
-                        <th>weight</th>
-                        <th>price</th>
-                        <th>description</th>
-                        <th>countOfShops</th>
-                        <th>add to shop</th>
-                        <th>delete</th>
-                        <th>update</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="product : ${products}">
-                        <td th:text="${product.getId()}"></td>
-                        <td th:text="${product.getName()}"></td>
-                        <td th:text="${product.getCategory()}"></td>
-                        <td th:text="${product.getWeight()}"></td>
-                        <td th:text="${product.getPrice()}"></td>
-                        <td>
-                            <a th:href="@{'/products/details/' + ${product.getId()}}" type="button"
-                               class="btn btn-primary">details</a>
-                        </td>
-                        <td>
-                            <a th:href="@{'/shops/' + ${product.getId()}}"
-                               th:text="${product.getCountOfShops()}">count</a>
-                        </td>
-                        <td>
-                            <a th:href="@{'/products/shop/' + ${product.getId()}}" type="button"
-                               class="btn btn-warning">add to shop</a>
-                        </td>
-                        <td>
-                            <a th:href="@{'/products/delete/' + ${product.getId()}}" type="button"
-                               class="btn btn-danger">delete</a>
-                        </td>
-                        <td>update (like create)</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="card-footer">
-                &lt;!&ndash;                <a class="btn btn-primary" href="#" role="button" th:href="@{/products/new}">Add new product</a>&ndash;&gt;
-            </div>
-        </div>
-    </div>
-</div>
-</body>
-</html>-->

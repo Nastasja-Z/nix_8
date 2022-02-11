@@ -1,6 +1,5 @@
 package ua.com.alevel.hw_7_data_table_jdbc.view.controller;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -11,10 +10,8 @@ import org.springframework.web.servlet.ModelAndView;
 import ua.com.alevel.hw_7_data_table_jdbc.facade.ProductFacade;
 import ua.com.alevel.hw_7_data_table_jdbc.facade.ShopFacade;
 import ua.com.alevel.hw_7_data_table_jdbc.persistence.entity.Category;
-import ua.com.alevel.hw_7_data_table_jdbc.persistence.entity.ShopStatus;
 import ua.com.alevel.hw_7_data_table_jdbc.view.dto.ReferenceViewDto;
 import ua.com.alevel.hw_7_data_table_jdbc.view.dto.request.product.ProductRequestDto;
-import ua.com.alevel.hw_7_data_table_jdbc.view.dto.request.shop.ShopRequestDto;
 import ua.com.alevel.hw_7_data_table_jdbc.view.dto.response.PageData;
 import ua.com.alevel.hw_7_data_table_jdbc.view.dto.response.product.ProductResponseDto;
 
@@ -114,8 +111,6 @@ public class ProductController extends AbstractController {
     public String updateProduct(Model model, @PathVariable Integer id) {
         model.addAttribute("product", productFacade.findById(id));
         model.addAttribute("categories", Category.values());
-        //for delete
-        model.addAttribute("shops", shopFacade.findAllByProductId(id));
         return "pages/products/product_update";
     }
 

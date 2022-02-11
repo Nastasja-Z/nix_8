@@ -11,12 +11,18 @@ import java.util.List;
 public interface BaseService<ENTITY extends BaseEntity> {
 
     void create(ENTITY entity);
+
     void update(ENTITY entity);
+
     void delete(Integer id);
+
     ENTITY findById(Integer id);
+
     void checkByExist(Integer id);
-    //<VIEW extends ENTITY> List<VIEW> findAllPrepareView();
+
     void createReferenceConnection(ReferenceViewDto entity);
+
     DataTableResponse<ENTITY> findAll(DataTableRequest request);
-    <REF extends BaseEntity>List<REF> findAllByNotIn(Integer id);
+
+    <REF extends BaseEntity> List<REF> findAllByNotIn(Integer id);
 }
